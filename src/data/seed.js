@@ -143,12 +143,12 @@ export function createSeed() {
   const currentBalance = running
 
   return {
-    version: 1,
+    version: 2,
     user: {
       firstName: 'Martin',
       lastName: 'Kováč',
       fullName: 'Martin Kováč',
-      pid: '1234567890',
+      pid: '0511034199',
       email: 'martin.kovac@email.sk',
       phone: '+421 903 441 228',
       address: 'Dunajská 24, 811 08 Bratislava',

@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useBank } from '../store/BankContext'
 import { CATEGORIES } from '../data/seed'
 import { formatDate, formatDateTime, formatIban, formatMoney } from '../lib/format'
@@ -9,7 +9,12 @@ export default function Accounts() {
   const bank = useBank()
   const nav = useNavigate()
   const selected = bank.accounts.find((a) => a.id === id) || bank.accounts[0]
-  const [q, setQ] = useState('')
+  const [params] = useSearchParams()
+  const [q, setQ] = useState(params.get('q') || '')
+
+  useEffect(() => {
+    setQ(params.get('q') || '')
+  }, [params])
   const [cat, setCat] = useState('all')
   const [dir, setDir] = useState('all')
   const [open, setOpen] = useState(null)
@@ -21,7 +26,7 @@ export default function Accounts() {
       .filter((t) => (dir === 'in' ? t.amount > 0 : dir === 'out' ? t.amount < 0 : true))
       .filter((t) => {
         const s = q.toLowerCase()
-        return !s || t.name.toLowerCase().includes(s) || (t.note || '').toLowerCase().includes(s) || (t.vs || '').includes(s)
+        return !s || t.name.toLowerCase().includes(s) || (t.note || '').toLowerCase().includes(s) || (t.vs || '').includes(s) || (t.iban || '').replace(/\s/g, '').toLowerCase().includes(s.replace(/\s/g, ''))
       })
       .sort((a, b) => new Date(b.date) - new Date(a.date))
   }, [bank.transactions, selected.id, q, cat, dir])

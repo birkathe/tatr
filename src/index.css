@@ -116,6 +116,14 @@ button { cursor: pointer; }
   outline: none;
   background: #fff;
   transition: border-color .15s, box-shadow .15s;
+  width: 100%;
+}
+.pass-wrap { position: relative; }
+.pass-wrap input { padding-right: 88px; }
+.pass-toggle {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  border: 0; background: none; color: var(--blue); font-size: 12px; font-weight: 600;
+  height: 32px; padding: 0 8px;
 }
 .field textarea { height: auto; padding: 10px 12px; resize: vertical; }
 .field input:focus, .field select:focus, .field textarea:focus {

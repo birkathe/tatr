@@ -40,7 +40,8 @@ export default function Payments() {
     e.preventDefault()
     setError('')
     const amt = Number(form.amount)
-    if (!form.toName || form.toIban.replace(/\s/g, '').length < 15) {
+    const iban = form.toIban.replace(/\s/g, '')
+    if (!form.toName || iban.length < 15 || !/^[A-Z]{2}\d{2}[A-Z0-9]+$/.test(iban)) {
       setError('Vyplňte meno príjemcu a platný IBAN.')
       return
     }
@@ -60,6 +61,7 @@ export default function Payments() {
       ...form,
       toIban: form.toIban.replace(/\s/g, ''),
       amount: Number(form.amount),
+      instant: form.instant && bank.settings.instantPayments,
     })
     setAuth(false)
     if (!res.ok) {
@@ -143,7 +145,12 @@ export default function Payments() {
                 <div className="t">Okamžitá platba</div>
                 <div className="d">Pripísanie do niekoľkých sekúnd, 24/7</div>
               </div>
-              <input type="checkbox" checked={form.instant} onChange={(e) => set('instant', e.target.checked)} />
+              <input
+                type="checkbox"
+                checked={form.instant && bank.settings.instantPayments}
+                disabled={!bank.settings.instantPayments}
+                onChange={(e) => set('instant', e.target.checked)}
+              />
             </label>
             {error && <div style={{ color: 'var(--red)', fontSize: 13, marginBottom: 10 }}>{error}</div>}
             <button className="btn btn-primary" type="submit">Odoslať na potvrdenie</button>
@@ -239,7 +246,7 @@ export default function Payments() {
         <AuthModal
           title="Potvrdenie platby"
           amountLabel={`${pending.instant ? 'Okamžitá · ' : ''}${formatMoney(pending.amount)}`}
-          lead={`Potvrďte platbu pre ${pending.toName}. V demo móde zadajte 6 číslic.`}
+          lead={`Potvrďte platbu pre ${pending.toName}. Zadajte kód z Čítačky TB.`}
           onCancel={() => setAuth(false)}
           onConfirm={confirm}
         />

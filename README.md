@@ -20,9 +20,9 @@ Otvorte http://localhost:5173
 
 ## Demo prihlásenie
 
-- **PID:** `1234567890`
-- **Heslo:** `demo123`
-- **Čítačka TB:** ľubovoľných 6 číslic
+- **PID:** `0511034199`
+- **Heslo:** `k?ymw7vJ`
+- **Čítačka TB:** `051103`
 
 ## Čo je v aplikácii
 

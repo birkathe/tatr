@@ -13,7 +13,8 @@ export default function Overview() {
   const liabilities = bank.accounts.filter((a) => a.balance < 0).reduce((s, a) => s + Math.abs(a.balance), 0)
   const recent = [...bank.transactions].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 8)
 
-  const month = new Date().toISOString().slice(0, 7)
+  const now = new Date()
+  const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
   const monthTx = bank.transactions.filter((t) => t.date.startsWith(month) && t.accountId === 'acc_personal')
   const spent = monthTx.filter((t) => t.amount < 0).reduce((s, t) => s + Math.abs(t.amount), 0)
   const income = monthTx.filter((t) => t.amount > 0).reduce((s, t) => s + t.amount, 0)
@@ -99,8 +100,7 @@ export default function Overview() {
                   </div>
                 </div>
                 <div className={`tx-amt ${t.amount > 0 ? 'in' : ''}`}>
-                  {t.amount > 0 ? '+' : ''}
-                  {formatMoney(t.amount)}
+                  {hide ? '••••' : `${t.amount > 0 ? '+' : ''}${formatMoney(t.amount)}`}
                 </div>
               </div>
             ))}

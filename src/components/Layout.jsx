@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import Logo from './Logo'
 import { Icon } from './Icons'
@@ -19,7 +20,13 @@ const NAV = [
 export default function Layout() {
   const bank = useBank()
   const nav = useNavigate()
+  const [q, setQ] = useState('')
   const unread = bank.messages.filter((m) => !m.read).length
+
+  function search(e) {
+    e.preventDefault()
+    nav(`/ucty?q=${encodeURIComponent(q.trim())}`)
+  }
 
   return (
     <div className="app-shell">
@@ -27,11 +34,17 @@ export default function Layout() {
         <strong>DEMO</strong> — toto nie je oficiálna služba Tatra banky. Ukážková kópia s fiktívnymi dátami.
       </div>
       <header className="topbar">
-        <Logo light compact={false} />
-        <div className="search">
+        <button type="button" onClick={() => nav('/')} style={{ background: 'none', border: 0, padding: 0, color: 'inherit' }}>
+          <Logo light compact={false} />
+        </button>
+        <form className="search" onSubmit={search}>
           <Icon name="search" size={16} />
-          <input placeholder="Hľadať pohyb, príjemcu, IBAN…" />
-        </div>
+          <input
+            placeholder="Hľadať pohyb, príjemcu, IBAN…"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+          />
+        </form>
         <div className="topbar-right">
           <button className="icon-btn" onClick={() => nav('/spravy')} title="Správy">
             <Icon name="bell" />

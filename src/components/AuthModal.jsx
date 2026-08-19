@@ -1,12 +1,17 @@
 import { useMemo, useState } from 'react'
+import { readerMatches } from '../lib/auth'
 
 export default function AuthModal({ title, lead, amountLabel, onCancel, onConfirm }) {
   const [code, setCode] = useState('')
+  const [error, setError] = useState('')
   const challenge = useMemo(() => String(Math.floor(100000 + Math.random() * 899999)), [])
 
   function submit(e) {
     e.preventDefault()
-    if (code.replace(/\s/g, '').length < 6) return
+    if (!readerMatches(code)) {
+      setError('Nesprávny overovací kód. Skúste znova.')
+      return
+    }
     onConfirm()
   }
 
@@ -15,7 +20,7 @@ export default function AuthModal({ title, lead, amountLabel, onCancel, onConfir
       <form className="modal" onClick={(e) => e.stopPropagation()} onSubmit={submit}>
         <h2>{title || 'Overenie Čítačkou TB'}</h2>
         <p className="lead">
-          {lead || 'Otvorte aplikáciu Čítačka TB a zadajte overovací kód. V tomto demo móde stačí ľubovoľných 6 číslic.'}
+          {lead || 'Otvorte aplikáciu Čítačka TB a zadajte overovací kód.'}
         </p>
         <div className="challenge">
           <div>
@@ -29,12 +34,16 @@ export default function AuthModal({ title, lead, amountLabel, onCancel, onConfir
           <input
             autoFocus
             inputMode="numeric"
-            maxLength={8}
+            maxLength={6}
             value={code}
-            onChange={(e) => setCode(e.target.value.replace(/[^\d]/g, ''))}
+            onChange={(e) => {
+              setCode(e.target.value.replace(/[^\d]/g, '').slice(0, 6))
+              setError('')
+            }}
             placeholder="••••••"
           />
         </div>
+        {error && <div style={{ color: 'var(--red)', fontSize: 13, marginBottom: 10 }}>{error}</div>}
         <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
           <button type="button" className="btn btn-ghost" onClick={onCancel} style={{ flex: 1 }}>
             Zrušiť

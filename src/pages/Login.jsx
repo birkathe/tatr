@@ -2,22 +2,24 @@ import { useState } from 'react'
 import Logo from '../components/Logo'
 import AuthModal from '../components/AuthModal'
 import { useBank } from '../store/BankContext'
+import { AUTH, passwordMatches, pidMatches } from '../lib/auth'
 
 export default function Login() {
   const { login } = useBank()
-  const [pid, setPid] = useState('1234567890')
-  const [password, setPassword] = useState('demo123')
+  const [pid, setPid] = useState('')
+  const [password, setPassword] = useState('')
+  const [showPass, setShowPass] = useState(false)
   const [error, setError] = useState('')
   const [step, setStep] = useState('form')
 
   function submit(e) {
     e.preventDefault()
-    if (!pid.trim() || !password.trim()) {
+    if (!pid.trim() || !password) {
       setError('Zadajte PID aj heslo.')
       return
     }
-    if (pid.replace(/\s/g, '') !== '1234567890' || password !== 'demo123') {
-      setError('Nesprávny PID alebo heslo. Pre demo použite 1234567890 / demo123.')
+    if (!pidMatches(pid) || !passwordMatches(password)) {
+      setError('Nesprávny PID alebo heslo.')
       return
     }
     setError('')
@@ -51,12 +53,30 @@ export default function Login() {
           <h2>Prihlásenie</h2>
           <div className="sub">Zadajte PID pridelený bankou a svoje heslo.</div>
           <div className="field">
-            <label>PID</label>
-            <input value={pid} onChange={(e) => setPid(e.target.value)} autoComplete="username" />
+            <label htmlFor="pid">PID</label>
+            <input
+              id="pid"
+              value={pid}
+              onChange={(e) => setPid(e.target.value.replace(/\D/g, '').slice(0, 10))}
+              autoComplete="username"
+              inputMode="numeric"
+              maxLength={10}
+            />
           </div>
           <div className="field">
-            <label>Heslo</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" />
+            <label htmlFor="heslo">Heslo</label>
+            <div className="pass-wrap">
+              <input
+                id="heslo"
+                type={showPass ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+              />
+              <button type="button" className="pass-toggle" onClick={() => setShowPass((v) => !v)}>
+                {showPass ? 'Skryť' : 'Zobraziť'}
+              </button>
+            </div>
           </div>
           {error && <div style={{ color: '#c0272d', fontSize: 13, marginBottom: 10 }}>{error}</div>}
           <div className="login-links">
@@ -65,9 +85,9 @@ export default function Login() {
           </div>
           <button className="btn btn-primary" type="submit">Prihlásiť sa</button>
           <div className="login-demo" style={{ marginTop: 16 }}>
-            Demo prístup: PID <code>1234567890</code> · heslo <code>demo123</code>
+            Demo prístup: PID <code>{AUTH.pid}</code> · heslo <code>{AUTH.password}</code>
             <br />
-            Overenie Čítačkou: ľubovoľných 6 číslic.
+            Overenie Čítačkou: <code>{AUTH.readerCode}</code>
           </div>
         </form>
       </div>
@@ -75,7 +95,7 @@ export default function Login() {
       {step === 'auth' && (
         <AuthModal
           title="Overenie prihlásenia"
-          lead="Potvrďte prihlásenie v aplikácii Čítačka TB. V demo móde zadajte ľubovoľných 6 číslic."
+          lead="Potvrďte prihlásenie v aplikácii Čítačka TB. Zadajte 6-miestny kód."
           onCancel={() => setStep('form')}
           onConfirm={login}
         />

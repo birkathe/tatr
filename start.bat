@@ -7,7 +7,7 @@ if not exist node_modules (
 )
 echo.
 echo Spustam Internet banking TB demo na http://localhost:5173
-echo Prihlasenie: PID 1234567890 / heslo demo123
+echo Prihlasenie: PID 0511034199 / heslo k?ymw7vJ / citacka 051103
 echo.
 call npm run dev
 pause
