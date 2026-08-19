@@ -1,0 +1,316 @@
+const now = new Date()
+
+function iso(daysAgo, hour = 10, minute = 12) {
+  const d = new Date(now)
+  d.setDate(d.getDate() - daysAgo)
+  d.setHours(hour, minute, 0, 0)
+  return d.toISOString()
+}
+
+export const CATEGORIES = {
+  potraviny: { label: 'Potraviny', color: '#1d7a46' },
+  doprava: { label: 'Doprava', color: '#0b6bcb' },
+  byvanie: { label: 'Bývanie a energie', color: '#6b4f2a' },
+  restauracie: { label: 'Reštaurácie a bary', color: '#c2410c' },
+  nakupovanie: { label: 'Nakupovanie', color: '#7c3aed' },
+  zabava: { label: 'Zábava a voľný čas', color: '#db2777' },
+  zdravie: { label: 'Zdravie', color: '#0f766e' },
+  telekom: { label: 'Telekomunikácie', color: '#2563eb' },
+  poistne: { label: 'Poistenie a poplatky', color: '#475569' },
+  transfer: { label: 'Prevody', color: '#334155' },
+  vklad: { label: 'Termínované vklady', color: '#0f766e' },
+  prijem: { label: 'Príjem', color: '#15803d' },
+  ine: { label: 'Iné', color: '#64748b' },
+}
+
+export const DEPOSIT_OFFERS = [
+  { months: 1, rate: 1.7, label: '1 mesiac' },
+  { months: 3, rate: 2.0, label: '3 mesiace' },
+  { months: 6, rate: 2.2, label: '6 mesiacov' },
+  { months: 12, rate: 2.5, label: '12 mesiacov' },
+  { months: 24, rate: 2.5, label: '24 mesiacov' },
+  { months: 36, rate: 2.5, label: '36 mesiacov' },
+]
+
+export const FX = [
+  { pair: 'EUR / CZK', buy: 24.21, sell: 25.08, flag: '🇨🇿' },
+  { pair: 'EUR / USD', buy: 1.072, sell: 1.118, flag: '🇺🇸' },
+  { pair: 'EUR / GBP', buy: 0.838, sell: 0.876, flag: '🇬🇧' },
+  { pair: 'EUR / CHF', buy: 0.928, sell: 0.969, flag: '🇨🇭' },
+  { pair: 'EUR / PLN', buy: 4.18, sell: 4.36, flag: '🇵🇱' },
+  { pair: 'EUR / HUF', buy: 388.4, sell: 406.1, flag: '🇭🇺' },
+]
+
+const TX = [
+  { days: 0, h: 8, m: 41, name: 'Lidl Bratislava', cat: 'potraviny', amt: -28.47, type: 'karta', note: 'POS nákup' },
+  { days: 0, h: 7, m: 12, name: 'Slovnaft 0284', cat: 'doprava', amt: -52.3, type: 'karta', note: 'PHM' },
+  { days: 1, h: 19, m: 22, name: 'Netflix International', cat: 'zabava', amt: -13.99, type: 'inkaso', note: 'Predplatné' },
+  { days: 1, h: 14, m: 5, name: 'Billa Aupark', cat: 'potraviny', amt: -41.18, type: 'karta' },
+  { days: 2, h: 12, m: 48, name: 'Meštiansky pivovar', cat: 'restauracie', amt: -36.8, type: 'karta' },
+  { days: 3, h: 9, m: 2, name: 'Orange Slovensko', cat: 'telekom', amt: -29.9, type: 'inkaso', note: 'Faktúra júl' },
+  { days: 3, h: 18, m: 33, name: 'Alza.sk', cat: 'nakupovanie', amt: -89.9, type: 'karta', note: 'E-shop' },
+  { days: 4, h: 8, m: 10, name: 'Dopravný podnik BA', cat: 'doprava', amt: -16.9, type: 'karta', note: '30-dňový lístok' },
+  { days: 5, h: 16, m: 40, name: 'Dr. Max Lekáreň', cat: 'zdravie', amt: -14.25, type: 'karta' },
+  { days: 6, h: 20, m: 11, name: 'Spotify AB', cat: 'zabava', amt: -6.99, type: 'karta' },
+  { days: 7, h: 11, m: 0, name: 'Martin Novák', cat: 'transfer', amt: -50, type: 'sepa', vs: '20260801', note: 'Narodeninový darček' },
+  { days: 8, h: 13, m: 25, name: 'Tesco Extra Petržalka', cat: 'potraviny', amt: -67.42, type: 'karta' },
+  { days: 9, h: 19, m: 8, name: 'Cinema City Eurovea', cat: 'zabava', amt: -18.4, type: 'karta' },
+  { days: 10, h: 10, m: 15, name: 'ZSE Energia', cat: 'byvanie', amt: -84.3, type: 'inkaso', note: 'Záloha elektrina' },
+  { days: 11, h: 9, m: 40, name: 'Bratislavská vodárenská', cat: 'byvanie', amt: -22.15, type: 'inkaso' },
+  { days: 12, h: 15, m: 2, name: 'Decathlon', cat: 'nakupovanie', amt: -54.99, type: 'karta' },
+  { days: 13, h: 12, m: 30, name: 'KFC Eurovea', cat: 'restauracie', amt: -12.7, type: 'karta' },
+  { days: 14, h: 8, m: 5, name: 'Tatra banka, a.s.', cat: 'poistne', amt: -4.9, type: 'poplatok', note: 'Mesačný poplatok za účet' },
+  { days: 15, h: 7, m: 55, name: 'Mestská hromadná doprava', cat: 'doprava', amt: -1.3, type: 'karta' },
+  { days: 16, h: 18, m: 44, name: 'Reserved', cat: 'nakupovanie', amt: -39.99, type: 'karta' },
+  { days: 18, h: 9, m: 0, name: 'UNION poisťovňa', cat: 'poistne', amt: -28.4, type: 'inkaso', note: 'Cestovné poistenie' },
+  { days: 19, h: 20, m: 21, name: 'Wolt', cat: 'restauracie', amt: -19.6, type: 'karta' },
+  { days: 21, h: 11, m: 18, name: 'Kaufland Bratislava', cat: 'potraviny', amt: -73.11, type: 'karta' },
+  { days: 23, h: 8, m: 0, name: 'PixelForge s.r.o.', cat: 'prijem', amt: 2140, type: 'mzda', note: 'Mzda za júl 2026' },
+  { days: 24, h: 16, m: 5, name: 'IKEA Bratislava', cat: 'nakupovanie', amt: -129.0, type: 'karta' },
+  { days: 26, h: 13, m: 40, name: 'Shell Devínska', cat: 'doprava', amt: -48.2, type: 'karta' },
+  { days: 28, h: 10, m: 22, name: 'dm drogerie markt', cat: 'nakupovanie', amt: -23.48, type: 'karta' },
+  { days: 30, h: 19, m: 15, name: 'Netflix International', cat: 'zabava', amt: -13.99, type: 'inkaso' },
+  { days: 32, h: 9, m: 10, name: 'Orange Slovensko', cat: 'telekom', amt: -29.9, type: 'inkaso' },
+  { days: 33, h: 17, m: 48, name: 'Tesco Extra', cat: 'potraviny', amt: -55.2, type: 'karta' },
+  { days: 35, h: 12, m: 5, name: 'U Kubistu', cat: 'restauracie', amt: -42.3, type: 'karta' },
+  { days: 37, h: 8, m: 20, name: 'ZSE Energia', cat: 'byvanie', amt: -84.3, type: 'inkaso' },
+  { days: 38, h: 14, m: 0, name: 'Martin Novák', cat: 'prijem', amt: 80, type: 'sepa', vs: '20260708', note: 'Vrátenie pôžičky' },
+  { days: 40, h: 11, m: 33, name: 'Lidl Bratislava', cat: 'potraviny', amt: -31.9, type: 'karta' },
+  { days: 42, h: 16, m: 10, name: 'Datart', cat: 'nakupovanie', amt: -159.0, type: 'karta' },
+  { days: 45, h: 7, m: 40, name: 'Slovnaft 0142', cat: 'doprava', amt: -61.15, type: 'karta' },
+  { days: 47, h: 9, m: 0, name: 'PixelForge s.r.o.', cat: 'prijem', amt: 2140, type: 'mzda', note: 'Mzda za jún 2026' },
+  { days: 48, h: 20, m: 5, name: 'HBO Max', cat: 'zabava', amt: -8.99, type: 'karta' },
+  { days: 50, h: 13, m: 22, name: 'Billa', cat: 'potraviny', amt: -38.64, type: 'karta' },
+  { days: 52, h: 10, m: 0, name: 'Tatra banka, a.s.', cat: 'poistne', amt: -4.9, type: 'poplatok', note: 'Mesačný poplatok za účet' },
+  { days: 54, h: 18, m: 30, name: 'Costa Coffee', cat: 'restauracie', amt: -6.4, type: 'karta' },
+  { days: 57, h: 15, m: 12, name: 'About You', cat: 'nakupovanie', amt: -47.8, type: 'karta' },
+  { days: 60, h: 8, m: 55, name: 'Lidl Bratislava', cat: 'potraviny', amt: -26.33, type: 'karta' },
+  { days: 61, h: 19, m: 0, name: 'Netflix International', cat: 'zabava', amt: -13.99, type: 'inkaso' },
+  { days: 62, h: 9, m: 10, name: 'Orange Slovensko', cat: 'telekom', amt: -29.9, type: 'inkaso' },
+  { days: 65, h: 12, m: 40, name: 'Dr. Max', cat: 'zdravie', amt: -9.8, type: 'karta' },
+  { days: 68, h: 17, m: 5, name: 'Tesco Extra', cat: 'potraviny', amt: -62.77, type: 'karta' },
+  { days: 70, h: 8, m: 0, name: 'ZSE Energia', cat: 'byvanie', amt: -84.3, type: 'inkaso' },
+  { days: 72, h: 9, m: 0, name: 'PixelForge s.r.o.', cat: 'prijem', amt: 2080, type: 'mzda', note: 'Mzda za máj 2026' },
+  { days: 75, h: 14, m: 18, name: 'IKEA', cat: 'nakupovanie', amt: -44.5, type: 'karta' },
+  { days: 78, h: 11, m: 50, name: 'Kaufland', cat: 'potraviny', amt: -49.2, type: 'karta' },
+  { days: 80, h: 19, m: 40, name: 'Wolt', cat: 'restauracie', amt: -17.3, type: 'karta' },
+  { days: 83, h: 7, m: 30, name: 'Shell', cat: 'doprava', amt: -55.0, type: 'karta' },
+  { days: 88, h: 10, m: 0, name: 'UNION poisťovňa', cat: 'poistne', amt: -28.4, type: 'inkaso' },
+  { days: 90, h: 19, m: 0, name: 'Netflix International', cat: 'zabava', amt: -13.99, type: 'inkaso' },
+  { days: 92, h: 9, m: 10, name: 'Orange Slovensko', cat: 'telekom', amt: -29.9, type: 'inkaso' },
+  { days: 94, h: 16, m: 22, name: 'Lidl Bratislava', cat: 'potraviny', amt: -33.41, type: 'karta' },
+  { days: 97, h: 9, m: 0, name: 'PixelForge s.r.o.', cat: 'prijem', amt: 2080, type: 'mzda', note: 'Mzda za apríl 2026' },
+  { days: 100, h: 13, m: 10, name: 'Billa', cat: 'potraviny', amt: -29.88, type: 'karta' },
+  { days: 104, h: 18, m: 0, name: 'Cinema City', cat: 'zabava', amt: -15.8, type: 'karta' },
+  { days: 108, h: 8, m: 0, name: 'ZSE Energia', cat: 'byvanie', amt: -79.9, type: 'inkaso' },
+  { days: 112, h: 12, m: 0, name: 'Decathlon', cat: 'nakupovanie', amt: -32.0, type: 'karta' },
+  { days: 118, h: 10, m: 15, name: 'Tesco Extra', cat: 'potraviny', amt: -58.13, type: 'karta' },
+  { days: 122, h: 9, m: 0, name: 'PixelForge s.r.o.', cat: 'prijem', amt: 2080, type: 'mzda', note: 'Mzda za marec 2026' },
+  { days: 128, h: 15, m: 40, name: 'Alza.sk', cat: 'nakupovanie', amt: -64.9, type: 'karta' },
+  { days: 135, h: 11, m: 20, name: 'Kaufland', cat: 'potraviny', amt: -44.05, type: 'karta' },
+]
+
+export function createSeed() {
+  const currentId = 'acc_personal'
+  const savingId = 'acc_saving'
+  const creditId = 'acc_credit'
+
+  const transactions = TX.map((t, i) => ({
+    id: `tx_${String(i + 1).padStart(3, '0')}`,
+    accountId: t.amt > 0 || t.cat === 'prijem' ? currentId : currentId,
+    date: iso(t.days, t.h, t.m),
+    name: t.name,
+    category: t.cat,
+    amount: t.amt,
+    currency: 'EUR',
+    type: t.type,
+    vs: t.vs || '',
+    ks: t.type === 'sepa' ? '0308' : '',
+    ss: '',
+    note: t.note || '',
+    iban: t.type === 'sepa' ? 'SK31 0900 0000 0001 7123 4567' : '',
+    status: 'zaúčtovaná',
+    balanceAfter: 0,
+  }))
+
+  // running balance from oldest to newest
+  const chronological = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date))
+  let running = 1840.22
+  chronological.forEach((tx) => {
+    running += tx.amount
+    tx.balanceAfter = Math.round(running * 100) / 100
+  })
+  const currentBalance = running
+
+  return {
+    version: 1,
+    user: {
+      firstName: 'Martin',
+      lastName: 'Kováč',
+      fullName: 'Martin Kováč',
+      pid: '1234567890',
+      email: 'martin.kovac@email.sk',
+      phone: '+421 903 441 228',
+      address: 'Dunajská 24, 811 08 Bratislava',
+      clientFrom: '2018-03-12',
+      branch: 'Bratislava – Námestie SNP',
+    },
+    settings: {
+      hideBalances: false,
+      instantPayments: true,
+      notifications: {
+        incoming: true,
+        outgoing: true,
+        card: true,
+        marketing: false,
+      },
+      pinSet: true,
+    },
+    accounts: [
+      {
+        id: currentId,
+        name: 'Tatra Personal',
+        product: 'Bežný účet',
+        iban: 'SK89 1100 0000 0029 4401 8372',
+        bic: 'TATRSKBX',
+        currency: 'EUR',
+        balance: Math.round(currentBalance * 100) / 100,
+        available: Math.round(currentBalance * 100) / 100,
+        overdraftLimit: 500,
+        overdraftUsed: 0,
+        favorite: true,
+        opened: '2018-03-12',
+        color: '#0b0b10',
+      },
+      {
+        id: savingId,
+        name: 'Sporiaci účet TB',
+        product: 'Sporenie',
+        iban: 'SK31 1100 0000 0029 5518 2201',
+        bic: 'TATRSKBX',
+        currency: 'EUR',
+        balance: 4200,
+        available: 4200,
+        rate: 0.5,
+        favorite: true,
+        opened: '2020-11-04',
+        color: '#123524',
+      },
+      {
+        id: creditId,
+        name: 'Kreditná karta',
+        product: 'Mastercard Gold',
+        iban: 'SK44 1100 0000 0029 8800 1144',
+        bic: 'TATRSKBX',
+        currency: 'EUR',
+        balance: -312.4,
+        available: 1687.6,
+        creditLimit: 2000,
+        favorite: false,
+        opened: '2021-06-18',
+        color: '#1a2744',
+      },
+    ],
+    cards: [
+      {
+        id: 'card_visa',
+        accountId: currentId,
+        brand: 'Visa',
+        product: 'TatraCard Visa',
+        holder: 'MARTIN KOVAC',
+        last4: '4418',
+        panMasked: '**** **** **** 4418',
+        expiry: '09/28',
+        status: 'aktívna',
+        pin: '4419',
+        variant: 'dark',
+        limits: { atm: 1000, pos: 2500, online: 1500, contactless: 50 },
+      },
+      {
+        id: 'card_mc',
+        accountId: creditId,
+        brand: 'Mastercard',
+        product: 'Mastercard Gold',
+        holder: 'MARTIN KOVAC',
+        last4: '8821',
+        panMasked: '**** **** **** 8821',
+        expiry: '03/29',
+        status: 'aktívna',
+        pin: '7721',
+        variant: 'gold',
+        limits: { atm: 500, pos: 2000, online: 1000, contactless: 50 },
+      },
+    ],
+    deposits: [
+      {
+        id: 'dep_001',
+        name: 'Digitálny termínovaný vklad',
+        accountFrom: currentId,
+        amount: 2500,
+        rate: 2.5,
+        months: 12,
+        start: iso(80, 10, 0),
+        end: new Date(new Date(iso(80)).setMonth(new Date(iso(80)).getMonth() + 12)).toISOString(),
+        interestExpected: 62.5,
+        autoRenew: false,
+        status: 'aktívny',
+      },
+    ],
+    recipients: [
+      { id: 'rcp_1', name: 'Martin Novák', iban: 'SK31 0900 0000 0001 7123 4567', bank: 'Slovenská sporiteľňa', vs: '', note: 'Kamoš' },
+      { id: 'rcp_2', name: 'ZSE Energia, a.s.', iban: 'SK15 1100 0000 0026 2610 0642', bank: 'Tatra banka', vs: '44018372', note: 'Elektrina' },
+      { id: 'rcp_3', name: 'Orange Slovensko, a.s.', iban: 'SK07 0200 0000 0018 0350 4058', bank: 'VÚB', vs: '903441228', note: 'Mobil' },
+      { id: 'rcp_4', name: 'Jana Kováčová', iban: 'SK42 0200 0000 0036 8841 2210', bank: 'VÚB', vs: '', note: 'Sestra' },
+    ],
+    templates: [
+      { id: 'tpl_1', name: 'Nájomné', recipientId: 'rcp_4', amount: 450, vs: '202608', note: 'Nájom august' },
+      { id: 'tpl_2', name: 'Orange', recipientId: 'rcp_3', amount: 29.9, vs: '903441228', note: 'Faktúra' },
+    ],
+    standingOrders: [
+      {
+        id: 'so_1',
+        name: 'Sporenie',
+        from: currentId,
+        toIban: 'SK31 1100 0000 0029 5518 2201',
+        toName: 'Sporiaci účet TB',
+        amount: 150,
+        day: 25,
+        next: iso(-10).slice(0, 10),
+        active: true,
+      },
+    ],
+    messages: [
+      {
+        id: 'msg_1',
+        date: iso(1, 9, 0),
+        title: 'Výpis za júl 2026 je pripravený',
+        body: 'Mesačný výpis z účtu Tatra Personal je dostupný v sekcii Dokumenty.',
+        read: false,
+        type: 'dokument',
+      },
+      {
+        id: 'msg_2',
+        date: iso(4, 11, 20),
+        title: 'Digitálny termínovaný vklad',
+        body: 'Váš termínovaný vklad 2 500,00 € na 12 mesiacov je aktívny. Očakávaný úrok 62,50 €.',
+        read: true,
+        type: 'produkt',
+      },
+      {
+        id: 'msg_3',
+        date: iso(12, 8, 0),
+        title: 'Bezpečnostné upozornenie',
+        body: 'Tatra banka vás nikdy nežiada o PID, heslo ani kód z Čítačky e-mailom. Prihlasujte sa len na adrese moja.tatrabanka.sk.',
+        read: true,
+        type: 'bezpecnost',
+      },
+    ],
+    transactions,
+    statements: [
+      { id: 'st_2026_07', period: 'Júl 2026', accountId: currentId, from: '2026-07-01', to: '2026-07-31' },
+      { id: 'st_2026_06', period: 'Jún 2026', accountId: currentId, from: '2026-06-01', to: '2026-06-30' },
+      { id: 'st_2026_05', period: 'Máj 2026', accountId: currentId, from: '2026-05-01', to: '2026-05-31' },
+      { id: 'st_2026_04', period: 'Apríl 2026', accountId: currentId, from: '2026-04-01', to: '2026-04-30' },
+    ],
+  }
+}
