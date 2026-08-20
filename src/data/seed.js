@@ -143,7 +143,7 @@ export function createSeed() {
   const currentBalance = running
 
   return {
-    version: 2,
+    version: 3,
     user: {
       firstName: 'Martin',
       lastName: 'Kováč',
@@ -243,6 +243,19 @@ export function createSeed() {
     ],
     deposits: [
       {
+        id: 'dep_74500',
+        name: 'Digitálny termínovaný vklad',
+        accountFrom: currentId,
+        amount: 74500,
+        rate: 5.3,
+        months: 6,
+        start: '2026-08-24T08:00:00.000Z',
+        end: '2027-02-24T08:00:00.000Z',
+        interestExpected: 1974.25,
+        autoRenew: false,
+        status: 'aktívny',
+      },
+      {
         id: 'dep_001',
         name: 'Digitálny termínovaný vklad',
         accountFrom: currentId,
@@ -280,6 +293,14 @@ export function createSeed() {
       },
     ],
     messages: [
+      {
+        id: 'msg_dep_74500',
+        date: '2026-08-24T08:00:00.000Z',
+        title: 'Digitálny termínovaný vklad 74 500 €',
+        body: 'Zriadili sme Digitálny termínovaný vklad 74 500,00 € na 6 mesiacov (24. 8. 2026 – 24. 2. 2027) so sadzbou 5,30 % p.a. Očakávaný úrok 1 974,25 €.',
+        read: false,
+        type: 'produkt',
+      },
       {
         id: 'msg_1',
         date: iso(1, 9, 0),
