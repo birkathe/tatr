@@ -39,6 +39,25 @@ button { cursor: pointer; }
 
 .app-shell { min-height: 100vh; }
 
+.tb-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tb-logo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  line-height: 1;
+}
+.tb-logo-sub {
+  font-size: 9.5px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  opacity: 0.72;
+  font-weight: 500;
+}
+
 .demo-bar {
   background: #1d2430;
   color: #d7dde6;
