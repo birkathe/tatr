@@ -2,16 +2,18 @@ import { useMemo, useState } from 'react'
 import { useBank } from '../store/BankContext'
 import AuthModal from '../components/AuthModal'
 import { formatIban, formatMoney } from '../lib/format'
+import { useI18n } from '../i18n/I18nContext'
 
 const empty = { fromId: 'acc_personal', toName: '', toIban: '', amount: '', vs: '', ks: '0308', ss: '', note: '', instant: true }
 
 export default function Payments() {
   const bank = useBank()
+  const { t } = useI18n()
   const [tab, setTab] = useState('nova')
   const [form, setForm] = useState(empty)
   const [error, setError] = useState('')
   const [auth, setAuth] = useState(false)
-  const [own, setOwn] = useState({ fromId: 'acc_personal', toId: 'acc_saving', amount: '', note: '' })
+  const [own, setOwn] = useState({ fromId: 'acc_personal', toId: 'acc_personal', amount: '', note: '' })
 
   const from = bank.accounts.find((a) => a.id === form.fromId)
   const pending = useMemo(() => {
@@ -85,15 +87,17 @@ export default function Payments() {
     <div>
       <div className="page-head">
         <div>
-          <h1>Platby</h1>
-          <p>Domáce a SEPA platby, okamžité platby a prevody medzi vlastnými účtami</p>
+          <h1>{t('payments.title')}</h1>
+          <p>{t('payments.sub')}</p>
         </div>
       </div>
 
       <div className="tabs">
-        <button className={`tab ${tab === 'nova' ? 'on' : ''}`} onClick={() => setTab('nova')}>Nová platba</button>
-        <button className={`tab ${tab === 'own' ? 'on' : ''}`} onClick={() => setTab('own')}>Medzi účtami</button>
-        <button className={`tab ${tab === 'tpl' ? 'on' : ''}`} onClick={() => setTab('tpl')}>Šablóny</button>
+        <button className={`tab ${tab === 'nova' ? 'on' : ''}`} onClick={() => setTab('nova')}>{t('payments.new')}</button>
+        {bank.accounts.length > 1 && (
+        <button className={`tab ${tab === 'own' ? 'on' : ''}`} onClick={() => setTab('own')}>{t('payments.own')}</button>
+        )}
+        <button className={`tab ${tab === 'tpl' ? 'on' : ''}`} onClick={() => setTab('tpl')}>{t('payments.tpl')}</button>
         <button className={`tab ${tab === 'so' ? 'on' : ''}`} onClick={() => setTab('so')}>Trvalé príkazy</button>
       </div>
 

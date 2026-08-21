@@ -3,9 +3,11 @@ import { useBank } from '../store/BankContext'
 import { DEPOSIT_OFFERS } from '../data/seed'
 import AuthModal from '../components/AuthModal'
 import { formatDate, formatMoney } from '../lib/format'
+import { useI18n } from '../i18n/I18nContext'
 
 export default function Deposits() {
   const bank = useBank()
+  const { t } = useI18n()
   const [creating, setCreating] = useState(false)
   const [form, setForm] = useState({ fromId: 'acc_personal', amount: '1000', months: 12, autoRenew: false })
   const [auth, setAuth] = useState(false)
@@ -52,8 +54,8 @@ export default function Deposits() {
     <div>
       <div className="page-head">
         <div>
-          <h1>Termínované vklady</h1>
-          <p>Digitálny termínovaný vklad so garantovaným úrokom — bez návštevy pobočky</p>
+          <h1>{t('deposits.title')}</h1>
+          <p>{t('deposits.sub')}</p>
         </div>
         <div className="page-actions">
           <button className="btn btn-primary" style={{ width: 'auto' }} onClick={() => setCreating(true)}>

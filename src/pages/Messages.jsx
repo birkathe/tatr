@@ -1,14 +1,16 @@
 import { useBank } from '../store/BankContext'
 import { formatDateTime } from '../lib/format'
+import { useI18n } from '../i18n/I18nContext'
 
 export default function Messages() {
   const bank = useBank()
+  const { t } = useI18n()
   return (
     <div>
       <div className="page-head">
         <div>
-          <h1>Schránka správ</h1>
-          <p>Oznámenia banky, výpisy a bezpečnostné upozornenia</p>
+          <h1>{t('messages.title')}</h1>
+          <p>{t('messages.sub')}</p>
         </div>
       </div>
       <div className="card">

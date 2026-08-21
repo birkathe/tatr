@@ -1,8 +1,10 @@
 import { useBank } from '../store/BankContext'
 import { formatIban, formatMoney } from '../lib/format'
+import { useI18n } from '../i18n/I18nContext'
 
 export default function Documents() {
   const bank = useBank()
+  const { t } = useI18n()
   const acc = bank.accounts[0]
 
   function download(st) {
@@ -31,8 +33,8 @@ export default function Documents() {
     <div>
       <div className="page-head">
         <div>
-          <h1>Dokumenty</h1>
-          <p>Mesačné výpisy a zmluvná dokumentácia</p>
+          <h1>{t('documents.title')}</h1>
+          <p>{t('documents.sub')}</p>
         </div>
       </div>
       <div className="card">

@@ -2,11 +2,13 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useBank } from '../store/BankContext'
 import { CATEGORIES } from '../data/seed'
-import { formatDate, formatDateTime, formatIban, formatMoney } from '../lib/format'
+import { formatIban } from '../lib/format'
+import { useI18n } from '../i18n/I18nContext'
 
 export default function Accounts() {
   const { id } = useParams()
   const bank = useBank()
+  const { t, money, date, dateTime } = useI18n()
   const nav = useNavigate()
   const selected = bank.accounts.find((a) => a.id === id) || bank.accounts[0]
   const [params] = useSearchParams()
@@ -34,7 +36,7 @@ export default function Accounts() {
   function exportCsv() {
     const rows = [['Dátum', 'Názov', 'Kategória', 'Suma', 'Mena', 'VS', 'Poznámka', 'Zostatok']]
     txs.forEach((t) => {
-      rows.push([formatDateTime(t.date), t.name, t.category, String(t.amount).replace('.', ','), t.currency, t.vs, t.note, t.balanceAfter])
+      rows.push([dateTime(t.date), t.name, t.category, String(t.amount).replace('.', ','), t.currency, t.vs, t.note, t.balanceAfter])
     })
     const csv = rows.map((r) => r.map((c) => `"${c ?? ''}"`).join(';')).join('\n')
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
@@ -52,8 +54,8 @@ export default function Accounts() {
     <div>
       <div className="page-head">
         <div>
-          <h1>Účty</h1>
-          <p>Prehľad zostatkov a pohybov na účtoch Tatra banky</p>
+          <h1>{t('accounts.title')}</h1>
+          <p>{t('accounts.sub')}</p>
         </div>
         <div className="page-actions">
           <button className="btn btn-ghost" onClick={exportCsv}>Export CSV</button>
@@ -75,7 +77,7 @@ export default function Accounts() {
           >
             <div style={{ fontSize: 12, color: 'var(--muted)' }}>{a.product}</div>
             <div style={{ fontWeight: 600, marginTop: 2 }}>{a.name}</div>
-            <div style={{ fontSize: 22, fontWeight: 650, letterSpacing: '-0.03em', margin: '10px 0 4px' }}>{formatMoney(a.balance)}</div>
+            <div style={{ fontSize: 22, fontWeight: 650, letterSpacing: '-0.03em', margin: '10px 0 4px' }}>{money(a.balance)}</div>
             <div style={{ fontSize: 12, color: 'var(--muted)' }}>{formatIban(a.iban)}</div>
           </button>
         ))}
@@ -85,13 +87,13 @@ export default function Accounts() {
         <div className="detail-grid">
           <div><div className="k">IBAN</div><div className="v mono">{formatIban(selected.iban)}</div></div>
           <div><div className="k">BIC</div><div className="v">{selected.bic}</div></div>
-          <div><div className="k">Dostupné</div><div className="v">{formatMoney(selected.available)}</div></div>
-          <div><div className="k">Otvorený</div><div className="v">{formatDate(selected.opened)}</div></div>
+          <div><div className="k">Dostupné</div><div className="v">{money(selected.available)}</div></div>
+          <div><div className="k">Otvorený</div><div className="v">{date(selected.opened)}</div></div>
           {selected.overdraftLimit != null && (
-            <div><div className="k">Povolené prečerpanie</div><div className="v">{formatMoney(selected.overdraftLimit)}</div></div>
+            <div><div className="k">Povolené prečerpanie</div><div className="v">{money(selected.overdraftLimit)}</div></div>
           )}
           {selected.creditLimit != null && (
-            <div><div className="k">Kreditný limit</div><div className="v">{formatMoney(selected.creditLimit)}</div></div>
+            <div><div className="k">Kreditný limit</div><div className="v">{money(selected.creditLimit)}</div></div>
           )}
         </div>
       </div>
@@ -101,7 +103,7 @@ export default function Accounts() {
         <select value={cat} onChange={(e) => setCat(e.target.value)}>
           <option value="all">Všetky kategórie</option>
           {Object.entries(CATEGORIES).map(([k, v]) => (
-            <option key={k} value={k}>{v.label}</option>
+            <option key={k} value={k}>{t(`cat.${k}`)}</option>
           ))}
         </select>
         <button className={`chip ${dir === 'all' ? 'on' : ''}`} onClick={() => setDir('all')}>Všetko</button>
@@ -112,7 +114,7 @@ export default function Accounts() {
 
       <div className="card">
         {txs.map((t) => {
-          const day = formatDate(t.date)
+          const day = date(t.date)
           const showDay = day !== lastDay
           lastDay = day
           return (
@@ -122,19 +124,19 @@ export default function Accounts() {
                 <div className={`tx-ico ${t.amount > 0 ? 'in' : ''}`}>{(t.name || '?').slice(0, 2).toUpperCase()}</div>
                 <div style={{ textAlign: 'left' }}>
                   <div className="tx-name">{t.name}</div>
-                  <div className="tx-meta">{CATEGORIES[t.category]?.label} · {t.type}{t.vs ? ` · VS ${t.vs}` : ''}</div>
+                  <div className="tx-meta">{t(`cat.${t.category}`)} · {t.type}{t.vs ? ` · VS ${t.vs}` : ''}</div>
                 </div>
                 <div className={`tx-amt ${t.amount > 0 ? 'in' : ''}`}>
-                  {t.amount > 0 ? '+' : ''}{formatMoney(t.amount)}
+                  {t.amount > 0 ? '+' : ''}{money(t.amount)}
                 </div>
               </button>
               {open === t.id && (
                 <div style={{ padding: '0 20px 16px 74px', fontSize: 13 }}>
                   <div className="detail-grid">
-                    <div><div className="k">Dátum</div><div className="v">{formatDateTime(t.date)}</div></div>
+                    <div><div className="k">Dátum</div><div className="v">{dateTime(t.date)}</div></div>
                     <div><div className="k">Stav</div><div className="v"><span className="pill ok">{t.status}</span></div></div>
                     <div><div className="k">IBAN protistrany</div><div className="v mono">{t.iban ? formatIban(t.iban) : '—'}</div></div>
-                    <div><div className="k">Zostatok po pohybe</div><div className="v">{t.balanceAfter != null ? formatMoney(t.balanceAfter) : '—'}</div></div>
+                    <div><div className="k">Zostatok po pohybe</div><div className="v">{t.balanceAfter != null ? money(t.balanceAfter) : '—'}</div></div>
                     <div><div className="k">VS / KS / SS</div><div className="v">{t.vs || '—'} / {t.ks || '—'} / {t.ss || '—'}</div></div>
                     <div><div className="k">Poznámka</div><div className="v">{t.note || '—'}</div></div>
                   </div>

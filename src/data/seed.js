@@ -37,16 +37,10 @@ export const FX = [
 ]
 
 const TX = [
-  { day: '2026-06-28', h: 18, m: 41, name: 'Lidl Košice – Moldavská', cat: 'potraviny', amt: -28.47, type: 'karta', note: 'POS nákup Košice' },
-  { day: '2026-06-27', h: 7, m: 12, name: 'Slovnaft Košice Južná', cat: 'doprava', amt: -52.3, type: 'karta', note: 'PHM' },
-  { day: '2026-06-26', h: 19, m: 22, name: 'Netflix International', cat: 'zabava', amt: -13.99, type: 'inkaso', note: 'Predplatné' },
-  { day: '2026-06-25', h: 9, m: 0, name: 'PixelForge s.r.o.', cat: 'prijem', amt: 2140, type: 'mzda', note: 'Mzda za jún 2026' },
-  { day: '2026-06-24', h: 14, m: 5, name: 'Billa Aupark Košice', cat: 'potraviny', amt: -41.18, type: 'karta' },
-  { day: '2026-06-22', h: 12, m: 48, name: 'Hostinec Pivovar Košice', cat: 'restauracie', amt: -36.8, type: 'karta' },
-  { day: '2026-06-20', h: 9, m: 2, name: 'Orange Slovensko', cat: 'telekom', amt: -29.9, type: 'inkaso', note: 'Faktúra' },
-  { day: '2026-06-19', h: 18, m: 33, name: 'Alza Box Košice', cat: 'nakupovanie', amt: -89.9, type: 'karta', note: 'Výdajné miesto' },
-  { day: '2026-06-18', h: 8, m: 10, name: 'DPMK Košice', cat: 'doprava', amt: -16.9, type: 'karta', note: '30-dňový lístok' },
+  { day: '2026-06-17', h: 18, m: 41, name: 'Lidl Košice – Moldavská', cat: 'potraviny', amt: -28.47, type: 'karta', note: 'POS nákup Košice' },
+  { day: '2026-06-17', h: 7, m: 12, name: 'Slovnaft Košice Južná', cat: 'doprava', amt: -52.3, type: 'karta', note: 'PHM' },
   { day: '2026-06-16', h: 16, m: 40, name: 'Dr. Max OC Optima', cat: 'zdravie', amt: -14.25, type: 'karta' },
+  { day: '2026-06-16', h: 9, m: 0, name: 'PixelForge s.r.o.', cat: 'prijem', amt: 2140, type: 'mzda', note: 'Mzda za jún 2026' },
   { day: '2026-06-14', h: 13, m: 25, name: 'Tesco Extra Toryská', cat: 'potraviny', amt: -67.42, type: 'karta' },
   { day: '2026-06-12', h: 19, m: 8, name: 'Cinema City Aupark KE', cat: 'zabava', amt: -18.4, type: 'karta' },
   { day: '2026-06-10', h: 10, m: 15, name: 'VSE Energia', cat: 'byvanie', amt: -84.3, type: 'inkaso', note: 'Záloha elektrina Košice' },
@@ -85,7 +79,6 @@ const TX = [
 
 export function createSeed() {
   const currentId = 'acc_personal'
-  const savingId = 'acc_saving'
 
   const transactions = TX.map((t, i) => ({
     id: `tx_${String(i + 1).padStart(3, '0')}`,
@@ -105,17 +98,16 @@ export function createSeed() {
     balanceAfter: 0,
   }))
 
-  // running balance from oldest to newest
-  const chronological = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date))
-  let running = 1840.22
-  chronological.forEach((tx) => {
-    running += tx.amount
+  const newestFirst = [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date))
+  let running = 83.52
+  newestFirst.forEach((tx) => {
     tx.balanceAfter = Math.round(running * 100) / 100
+    running = Math.round((running - tx.amount) * 100) / 100
   })
-  const currentBalance = running
+  const currentBalance = 83.52
 
   return {
-    version: 5,
+    version: 6,
     user: {
       firstName: 'Yurii',
       lastName: 'Biriukov',
@@ -153,20 +145,6 @@ export function createSeed() {
         favorite: true,
         opened: '2018-03-12',
         color: '#0b0b10',
-      },
-      {
-        id: savingId,
-        name: 'Sporiaci účet TB',
-        product: 'Sporenie',
-        iban: 'SK31 1100 0000 0029 5518 2201',
-        bic: 'TATRSKBX',
-        currency: 'EUR',
-        balance: 4200,
-        available: 4200,
-        rate: 0.5,
-        favorite: true,
-        opened: '2020-11-04',
-        color: '#123524',
       },
     ],
     cards: [
@@ -210,19 +188,7 @@ export function createSeed() {
       { id: 'tpl_1', name: 'Nájomné', recipientId: 'rcp_4', amount: 450, vs: '202608', note: 'Nájom august' },
       { id: 'tpl_2', name: 'Orange', recipientId: 'rcp_3', amount: 29.9, vs: '903441228', note: 'Faktúra' },
     ],
-    standingOrders: [
-      {
-        id: 'so_1',
-        name: 'Sporenie',
-        from: currentId,
-        toIban: 'SK31 1100 0000 0029 5518 2201',
-        toName: 'Sporiaci účet TB',
-        amount: 150,
-        day: 25,
-        next: '2026-07-25',
-        active: true,
-      },
-    ],
+    standingOrders: [],
     messages: [
       {
         id: 'msg_dep_74500',

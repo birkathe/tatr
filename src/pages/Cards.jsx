@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useBank } from '../store/BankContext'
-import { formatIban, formatMoney } from '../lib/format'
+import { formatIban } from '../lib/format'
+import { useI18n } from '../i18n/I18nContext'
 
 function TatraMark({ size = 28 }) {
   return (
@@ -14,11 +15,12 @@ function TatraMark({ size = 28 }) {
 }
 
 function PayCard({ card }) {
+  const { t } = useI18n()
   return (
     <div className="paycard classic">
       <div className="paycard-top">
         <span className="paycard-logo"><TatraMark /> Tatra banka</span>
-        <span className="paycard-contactless" title="Bezkontaktná">
+        <span className="paycard-contactless">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
             <path d="M8.5 8.5c2 2 2 5 0 7" />
             <path d="M12 6c3.2 3 3.2 9 0 12" />
@@ -30,11 +32,11 @@ function PayCard({ card }) {
       <div className="pan">{card.panMasked}</div>
       <div className="bot">
         <div>
-          <div className="paycard-label">DRŽITEĽ KARTY</div>
+          <div className="paycard-label">{t('cards.holder')}</div>
           <div>{card.holder}</div>
         </div>
         <div>
-          <div className="paycard-label">PLATÍ DO</div>
+          <div className="paycard-label">{t('cards.exp')}</div>
           <div>{card.expiry}</div>
         </div>
         <div className="paycard-visa">VISA</div>
@@ -45,6 +47,7 @@ function PayCard({ card }) {
 
 export default function Cards() {
   const bank = useBank()
+  const { t, money } = useI18n()
   const [pinFor, setPinFor] = useState(null)
   const [edit, setEdit] = useState(null)
   const card = bank.cards[0]
@@ -55,8 +58,8 @@ export default function Cards() {
     <div>
       <div className="page-head">
         <div>
-          <h1>Karty</h1>
-          <p>TatraCard Visa Classic viazaná na účet v Košiciach</p>
+          <h1>{t('cards.title')}</h1>
+          <p>{t('cards.sub')}</p>
         </div>
       </div>
       <div className="card-page">
@@ -72,10 +75,10 @@ export default function Cards() {
             <span className={`pill ${card.status === 'aktívna' ? 'ok' : 'off'}`}>{card.status}</span>
           </div>
           <div className="detail-grid" style={{ margin: '12px 0' }}>
-            <div><div className="k">ATM / deň</div><div className="v">{formatMoney(card.limits.atm)}</div></div>
-            <div><div className="k">POS / deň</div><div className="v">{formatMoney(card.limits.pos)}</div></div>
-            <div><div className="k">Internet / deň</div><div className="v">{formatMoney(card.limits.online)}</div></div>
-            <div><div className="k">Bezkontaktne bez PIN</div><div className="v">{formatMoney(card.limits.contactless)}</div></div>
+            <div><div className="k">ATM / deň</div><div className="v">{money(card.limits.atm)}</div></div>
+            <div><div className="k">POS / deň</div><div className="v">{money(card.limits.pos)}</div></div>
+            <div><div className="k">Internet / deň</div><div className="v">{money(card.limits.online)}</div></div>
+            <div><div className="k">Bezkontaktne bez PIN</div><div className="v">{money(card.limits.contactless)}</div></div>
           </div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <button

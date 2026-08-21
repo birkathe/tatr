@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { useBank } from '../store/BankContext'
 import { formatIban } from '../lib/format'
+import { useI18n } from '../i18n/I18nContext'
 
 export default function Recipients() {
   const bank = useBank()
+  const { t } = useI18n()
   const [form, setForm] = useState({ name: '', iban: '', bankName: '', vs: '', note: '' })
   const [open, setOpen] = useState(false)
 
@@ -19,8 +21,8 @@ export default function Recipients() {
     <div>
       <div className="page-head">
         <div>
-          <h1>Príjemcovia</h1>
-          <p>Uložené účty pre rýchlejšie zadávanie platieb</p>
+          <h1>{t('recipients.title')}</h1>
+          <p>{t('recipients.sub')}</p>
         </div>
         <button className="btn btn-primary" style={{ width: 'auto' }} onClick={() => setOpen((v) => !v)}>
           + Nový príjemca

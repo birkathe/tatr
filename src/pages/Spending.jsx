@@ -3,6 +3,7 @@ import { useBank } from '../store/BankContext'
 import { CATEGORIES } from '../data/seed'
 import { Donut, MonthBars } from '../components/Charts'
 import { formatMoney, monthLabel } from '../lib/format'
+import { useI18n } from '../i18n/I18nContext'
 
 function monthKey(d) {
   const y = d.getFullYear()
@@ -22,6 +23,7 @@ function lastMonths(n) {
 
 export default function Spending() {
   const bank = useBank()
+  const { t } = useI18n()
   const months = lastMonths(6)
   const [period, setPeriod] = useState(months[months.length - 1])
   const [cat, setCat] = useState('all')
@@ -65,8 +67,8 @@ export default function Spending() {
     <div>
       <div className="page-head">
         <div>
-          <h1>Spending report TB</h1>
-          <p>Prehľad príjmov a výdavkov na bežnom účte v interaktívnych grafoch</p>
+          <h1>{t('spending.title')}</h1>
+          <p>{t('spending.sub')}</p>
         </div>
         <select value={period} onChange={(e) => setPeriod(e.target.value)} style={{ height: 40, borderRadius: 10, border: '1px solid var(--line)', padding: '0 10px' }}>
           {months.map((m) => (

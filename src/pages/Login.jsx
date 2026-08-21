@@ -3,9 +3,11 @@ import Logo from '../components/Logo'
 import AuthModal from '../components/AuthModal'
 import { useBank } from '../store/BankContext'
 import { passwordMatches, pidMatches } from '../lib/auth'
+import { LangSwitch, useI18n } from '../i18n/I18nContext'
 
 export default function Login() {
   const { login } = useBank()
+  const { t } = useI18n()
   const [pid, setPid] = useState('')
   const [password, setPassword] = useState('')
   const [showPass, setShowPass] = useState(false)
@@ -15,11 +17,11 @@ export default function Login() {
   function submit(e) {
     e.preventDefault()
     if (!pid.trim() || !password) {
-      setError('Zadajte PID aj heslo.')
+      setError(t('login.needBoth'))
       return
     }
     if (!pidMatches(pid) || !passwordMatches(password)) {
-      setError('Nesprávny PID alebo heslo.')
+      setError(t('login.wrong'))
       return
     }
     setError('')
@@ -28,32 +30,30 @@ export default function Login() {
 
   return (
     <div className="login-page">
-      <div className="demo-bar">
-        <strong>DEMO</strong> — nie je to oficiálna služba Tatra banky. Údaje sú fiktívne a ostávajú vo vašom prehliadači.
-      </div>
+      <div className="demo-bar">{t('loginDemo')}</div>
       <div className="login-top">
         <Logo light />
-        <div className="meta">DIALOG *1100 · SK</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <LangSwitch light />
+          <div className="meta">{t('dialog')}</div>
+        </div>
       </div>
       <div className="login-wrap">
         <div className="login-hero">
-          <h1>Internet banking TB</h1>
-          <p>
-            Najoceňovanejší internet banking na Slovensku. Prehľad účtov, platby, karty, digitálne
-            termínované vklady a Spending report TB — na jednom mieste.
-          </p>
+          <h1>{t('ib')}</h1>
+          <p>{t('login.hero')}</p>
           <ul className="login-points">
-            <li><i>✓</i> Prihlásenie PID-om a overenie Čítačkou TB</li>
-            <li><i>✓</i> Okamžité platby 24/7</li>
-            <li><i>✓</i> Digitálny termínovaný vklad online</li>
-            <li><i>✓</i> História výdavkov a kategórie</li>
+            <li><i>✓</i> {t('login.p1')}</li>
+            <li><i>✓</i> {t('login.p2')}</li>
+            <li><i>✓</i> {t('login.p3')}</li>
+            <li><i>✓</i> {t('login.p4')}</li>
           </ul>
         </div>
         <form className="login-card" onSubmit={submit}>
-          <h2>Prihlásenie</h2>
-          <div className="sub">Zadajte PID pridelený bankou a svoje heslo.</div>
+          <h2>{t('login.title')}</h2>
+          <div className="sub">{t('login.sub')}</div>
           <div className="field">
-            <label htmlFor="pid">PID</label>
+            <label htmlFor="pid">{t('login.pid')}</label>
             <input
               id="pid"
               value={pid}
@@ -64,7 +64,7 @@ export default function Login() {
             />
           </div>
           <div className="field">
-            <label htmlFor="heslo">Heslo</label>
+            <label htmlFor="heslo">{t('login.password')}</label>
             <div className="pass-wrap">
               <input
                 id="heslo"
@@ -74,23 +74,23 @@ export default function Login() {
                 autoComplete="current-password"
               />
               <button type="button" className="pass-toggle" onClick={() => setShowPass((v) => !v)}>
-                {showPass ? 'Skryť' : 'Zobraziť'}
+                {showPass ? t('login.hide') : t('login.show')}
               </button>
             </div>
           </div>
           {error && <div style={{ color: '#c0272d', fontSize: 13, marginBottom: 10 }}>{error}</div>}
           <div className="login-links">
-            <span style={{ color: '#6d7178' }}>Zabudnuté heslo</span>
-            <span style={{ color: '#6d7178' }}>Aktivácia služby</span>
+            <span style={{ color: '#6d7178' }}>{t('login.forgot')}</span>
+            <span style={{ color: '#6d7178' }}>{t('login.activate')}</span>
           </div>
-          <button className="btn btn-primary" type="submit">Prihlásiť sa</button>
+          <button className="btn btn-primary" type="submit">{t('login.submit')}</button>
         </form>
       </div>
-      <div className="login-footer">© Tatra banka, a.s. — ukážková kópia pre vzdelávacie účely. Člen skupiny Raiffeisen Bank International.</div>
+      <div className="login-footer">{t('login.footer')}</div>
       {step === 'auth' && (
         <AuthModal
-          title="Overenie prihlásenia"
-          lead="Potvrďte prihlásenie v aplikácii Čítačka TB. Zadajte 6-miestny kód."
+          title={t('login.authTitle')}
+          lead={t('login.authLead')}
           onCancel={() => setStep('form')}
           onConfirm={login}
         />
