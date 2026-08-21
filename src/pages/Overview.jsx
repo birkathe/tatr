@@ -64,7 +64,7 @@ export default function Overview() {
         </div>
       </div>
 
-      <div className="grid grid-2" style={{ marginBottom: 16 }}>
+      <div className="grid grid-eq" style={{ marginBottom: 16 }}>
         {bank.accounts.map((a) => (
           <Link key={a.id} to={`/ucty/${a.id}`} className="card acc-tile" style={{ background: a.color }}>
             <div className="prod">{a.product}</div>
@@ -115,7 +115,9 @@ export default function Overview() {
             <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 10 }}>
               Najväčšie kategórie za {new Date().toLocaleDateString('sk-SK', { month: 'long' })}
             </div>
-            {topCats.map(([k, v]) => (
+            {topCats.length === 0 ? (
+              <div className="empty" style={{ padding: '18px 0' }}>V tomto mesiaci zatiaľ nie sú žiadne výdavky.</div>
+            ) : topCats.map(([k, v]) => (
               <div className="bar-row" key={k}>
                 <div style={{ fontSize: 13 }}>{CATEGORIES[k]?.label}</div>
                 <div className="bar-track">

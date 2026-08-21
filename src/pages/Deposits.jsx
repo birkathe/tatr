@@ -77,8 +77,8 @@ export default function Deposits() {
         </div>
         <div className="card kpi">
           <div className="l">Najlepšia sadzba</div>
-          <div className="v">2,50 % p.a.</div>
-          <div className="s">12 – 36 mesiacov</div>
+          <div className="v">5,30 % p.a.</div>
+          <div className="s">aktuálny vklad</div>
         </div>
       </div>
 
@@ -140,7 +140,7 @@ export default function Deposits() {
       )}
 
       <h3 style={{ fontSize: 16, margin: '8px 0 12px' }}>Moje vklady</h3>
-      <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', marginBottom: 20 }}>
+      <div className="grid grid-eq" style={{ marginBottom: 20 }}>
         {active.map((d) => {
           const start = new Date(d.start)
           const end = new Date(d.end)

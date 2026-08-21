@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Logo from '../components/Logo'
 import AuthModal from '../components/AuthModal'
 import { useBank } from '../store/BankContext'
-import { AUTH, passwordMatches, pidMatches } from '../lib/auth'
+import { passwordMatches, pidMatches } from '../lib/auth'
 
 export default function Login() {
   const { login } = useBank()
@@ -84,11 +84,6 @@ export default function Login() {
             <span style={{ color: '#6d7178' }}>Aktivácia služby</span>
           </div>
           <button className="btn btn-primary" type="submit">Prihlásiť sa</button>
-          <div className="login-demo" style={{ marginTop: 16 }}>
-            Demo prístup: PID <code>{AUTH.pid}</code> · heslo <code>{AUTH.password}</code>
-            <br />
-            Overenie Čítačkou: <code>{AUTH.readerCode}</code>
-          </div>
         </form>
       </div>
       <div className="login-footer">© Tatra banka, a.s. — ukážková kópia pre vzdelávacie účely. Člen skupiny Raiffeisen Bank International.</div>

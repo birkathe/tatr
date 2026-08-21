@@ -35,4 +35,4 @@ Otvorte http://localhost:5173
 - **Spending report TB** — kategórie, grafy, história výdavkov
 - Príjemcovia, dokumenty / výpisy, schránka, nastavenia
 
-Údaje klienta (Martin Kováč) sú fiktívne.
+Údaje klienta (Yurii Biriukov) sú fiktívne.
