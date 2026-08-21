@@ -300,9 +300,9 @@ button { cursor: pointer; }
 
 /* account tiles */
 .acc-tile {
-  color: #fff; border: 0; padding: 18px 18px 16px; min-height: 148px;
+  color: #fff; border: 0; padding: 20px 20px 18px; min-height: 160px;
   display: flex; flex-direction: column; position: relative; overflow: hidden;
-  text-decoration: none;
+  text-decoration: none; border-radius: 16px;
 }
 .acc-tile:hover { filter: brightness(1.06); text-decoration: none; }
 .acc-tile .prod { font-size: 12px; opacity: .72; }
@@ -372,19 +372,38 @@ table.data tr:hover td { background: #fafafa; }
 
 /* cards visual */
 .paycard {
-  width: 100%; aspect-ratio: 1.62; border-radius: 16px; padding: 18px 20px;
+  width: 100%; aspect-ratio: 1.62; border-radius: 18px; padding: 20px 22px;
   color: #fff; display: flex; flex-direction: column; justify-content: space-between;
   position: relative; overflow: hidden;
+  box-shadow: 0 18px 40px rgba(8, 10, 18, 0.28);
 }
-.paycard.dark { background: linear-gradient(145deg, #17171f, #2a2d3a); }
-.paycard.gold { background: linear-gradient(145deg, #8a6b2f, #d4b56a 55%, #7a5a24); color: #1a1408; }
-.paycard .brand { font-size: 13px; font-weight: 700; letter-spacing: .08em; }
-.paycard .pan { font-size: 18px; letter-spacing: .14em; font-weight: 500; }
-.paycard .bot { display: flex; justify-content: space-between; font-size: 12px; opacity: .9; }
+.paycard.classic {
+  background:
+    radial-gradient(120% 80% at 100% 0%, rgba(80, 110, 180, 0.28), transparent 50%),
+    linear-gradient(145deg, #0c0d14 0%, #1a1d2b 55%, #12141c 100%);
+}
+.paycard-top { display: flex; justify-content: space-between; align-items: center; }
+.paycard-logo { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 650; letter-spacing: -0.02em; }
+.paycard-contactless { opacity: 0.75; }
+.paycard-chip {
+  width: 42px; height: 32px; border-radius: 6px; margin: 10px 0 8px;
+  background: linear-gradient(135deg, #d4c48a, #b3984e 40%, #efe3b4 70%, #9a8040);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15);
+  position: relative;
+}
+.paycard-chip::before {
+  content: ""; position: absolute; inset: 7px 4px; border: 1px solid rgba(80,60,20,0.35); border-radius: 3px;
+}
+.paycard .pan { font-size: 19px; letter-spacing: .16em; font-weight: 500; font-variant-numeric: tabular-nums; }
+.paycard .bot { display: flex; justify-content: space-between; align-items: flex-end; font-size: 12px; gap: 12px; }
+.paycard-label { font-size: 8px; letter-spacing: .12em; opacity: 0.55; margin-bottom: 3px; }
+.paycard-visa { font-weight: 800; font-size: 18px; font-style: italic; letter-spacing: 0.04em; }
 .paycard::after {
-  content: ""; position: absolute; width: 180px; height: 180px; border-radius: 50%;
-  background: rgba(255,255,255,0.08); right: -50px; top: -60px;
+  content: ""; position: absolute; width: 220px; height: 220px; border-radius: 50%;
+  background: rgba(255,255,255,0.05); right: -70px; top: -80px;
 }
+.card-page { max-width: 480px; }
+.card-spotlight { overflow: hidden; }
 
 /* deposit offers */
 .offer {

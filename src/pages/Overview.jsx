@@ -10,7 +10,6 @@ export default function Overview() {
   const current = bank.accounts.find((a) => a.id === 'acc_personal')
   const assets = bank.accounts.filter((a) => a.balance >= 0).reduce((s, a) => s + a.balance, 0)
     + bank.deposits.filter((d) => d.status === 'aktívny').reduce((s, d) => s + d.amount, 0)
-  const liabilities = bank.accounts.filter((a) => a.balance < 0).reduce((s, a) => s + Math.abs(a.balance), 0)
   const recent = [...bank.transactions].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 8)
 
   const now = new Date()
@@ -30,7 +29,7 @@ export default function Overview() {
       <div className="page-head">
         <div>
           <h1>{greeting()}, {bank.user.firstName}</h1>
-          <p>{new Date().toLocaleDateString('sk-SK', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
+          <p>{new Date().toLocaleDateString('sk-SK', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })} · Košice</p>
         </div>
         <div className="page-actions">
           <Link to="/platby" className="btn btn-primary" style={{ width: 'auto', textDecoration: 'none' }}>
@@ -49,9 +48,9 @@ export default function Overview() {
           <div className="s">Účty + termínované vklady</div>
         </div>
         <div className="card kpi">
-          <div className="l">Záväzky</div>
-          <div className="v">{hide ? '••••' : formatMoney(liabilities)}</div>
-          <div className="s">Kreditná karta</div>
+          <div className="l">Sporenie</div>
+          <div className="v">{hide ? '••••' : formatMoney(bank.accounts.find((a) => a.id === 'acc_saving')?.balance || 0)}</div>
+          <div className="s">Sporiaci účet TB</div>
         </div>
         <div className="card kpi">
           <div className="l">Výdavky tento mesiac</div>
@@ -65,7 +64,7 @@ export default function Overview() {
         </div>
       </div>
 
-      <div className="grid grid-3" style={{ marginBottom: 16 }}>
+      <div className="grid grid-2" style={{ marginBottom: 16 }}>
         {bank.accounts.map((a) => (
           <Link key={a.id} to={`/ucty/${a.id}`} className="card acc-tile" style={{ background: a.color }}>
             <div className="prod">{a.product}</div>

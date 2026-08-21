@@ -1,73 +1,105 @@
 import { useState } from 'react'
 import { useBank } from '../store/BankContext'
-import { formatMoney } from '../lib/format'
+import { formatIban, formatMoney } from '../lib/format'
+
+function TatraMark({ size = 28 }) {
+  return (
+    <svg width={size} height={size} viewBox="542 543 1168 926" fill="currentColor" aria-hidden>
+      <path d="M542.9,1468.9h1167v-925h-191v19h172v887H562.9l-1-887h630v-19h-649v925Z" />
+      <polygon points="958.15 799.9 668.9 1343.9 813.9 1343.9 1103.15 799.9 958.15 799.9" />
+      <polygon points="1299.27 543.9 873.9 1343.9 1018.9 1343.9 1444.27 543.9 1299.27 543.9" />
+      <polygon points="1435.15 673.9 1078.9 1343.9 1223.9 1343.9 1580.15 673.9 1435.15 673.9" />
+    </svg>
+  )
+}
+
+function PayCard({ card }) {
+  return (
+    <div className="paycard classic">
+      <div className="paycard-top">
+        <span className="paycard-logo"><TatraMark /> Tatra banka</span>
+        <span className="paycard-contactless" title="Bezkontaktná">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
+            <path d="M8.5 8.5c2 2 2 5 0 7" />
+            <path d="M12 6c3.2 3 3.2 9 0 12" />
+            <path d="M15.5 3.8c4.2 4 4.2 12.4 0 16.4" />
+          </svg>
+        </span>
+      </div>
+      <div className="paycard-chip" />
+      <div className="pan">{card.panMasked}</div>
+      <div className="bot">
+        <div>
+          <div className="paycard-label">DRŽITEĽ KARTY</div>
+          <div>{card.holder}</div>
+        </div>
+        <div>
+          <div className="paycard-label">PLATÍ DO</div>
+          <div>{card.expiry}</div>
+        </div>
+        <div className="paycard-visa">VISA</div>
+      </div>
+    </div>
+  )
+}
 
 export default function Cards() {
   const bank = useBank()
   const [pinFor, setPinFor] = useState(null)
   const [edit, setEdit] = useState(null)
+  const card = bank.cards[0]
+  if (!card) return <div className="empty">Žiadna karta.</div>
+  const acc = bank.getAccount(card.accountId)
 
   return (
     <div>
       <div className="page-head">
         <div>
           <h1>Karty</h1>
-          <p>Správa debetných a kreditných kariet, limity a PIN</p>
+          <p>TatraCard Visa Classic viazaná na účet v Košiciach</p>
         </div>
       </div>
-      <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-        {bank.cards.map((c) => {
-          const acc = bank.getAccount(c.accountId)
-          return (
-            <div key={c.id} className="card card-pad">
-              <div className={`paycard ${c.variant}`} style={{ marginBottom: 16 }}>
-                <div className="brand">{c.brand.toUpperCase()}</div>
-                <div>
-                  <div className="pan">{c.panMasked}</div>
-                  <div className="bot">
-                    <span>{c.holder}</span>
-                    <span>EXP {c.expiry}</span>
-                  </div>
-                </div>
+      <div className="card-page">
+        <div className="card card-pad card-spotlight">
+          <PayCard card={card} />
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '16px 0 10px' }}>
+            <div>
+              <div style={{ fontWeight: 650, fontSize: 16 }}>{card.product}</div>
+              <div style={{ fontSize: 12, color: 'var(--muted)' }}>
+                {acc?.name} · {acc ? formatIban(acc.iban) : ''}
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                <div>
-                  <div style={{ fontWeight: 600 }}>{c.product}</div>
-                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>{acc?.name}</div>
-                </div>
-                <span className={`pill ${c.status === 'aktívna' ? 'ok' : 'off'}`}>{c.status}</span>
-              </div>
-              <div className="detail-grid" style={{ margin: '12px 0' }}>
-                <div><div className="k">ATM / deň</div><div className="v">{formatMoney(c.limits.atm)}</div></div>
-                <div><div className="k">POS / deň</div><div className="v">{formatMoney(c.limits.pos)}</div></div>
-                <div><div className="k">Internet / deň</div><div className="v">{formatMoney(c.limits.online)}</div></div>
-                <div><div className="k">Bezkontaktne bez PIN</div><div className="v">{formatMoney(c.limits.contactless)}</div></div>
-              </div>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                <button
-                  className={`btn btn-sm ${c.status === 'aktívna' ? 'btn-danger' : 'btn-soft'}`}
-                  onClick={() => bank.updateCard(c.id, { status: c.status === 'aktívna' ? 'blokovaná' : 'aktívna' })}
-                >
-                  {c.status === 'aktívna' ? 'Blokovať kartu' : 'Odblokovať'}
-                </button>
-                <button className="btn btn-sm btn-ghost" onClick={() => setPinFor(pinFor === c.id ? null : c.id)}>
-                  Zobraziť PIN
-                </button>
-                <button className="btn btn-sm btn-ghost" onClick={() => setEdit(edit === c.id ? null : c.id)}>
-                  Upraviť limity
-                </button>
-              </div>
-              {pinFor === c.id && (
-                <div style={{ marginTop: 12, background: '#f6f7f9', borderRadius: 10, padding: 12, fontSize: 14 }}>
-                  PIN karty: <b className="mono" style={{ letterSpacing: '.2em' }}>{c.pin}</b>
-                </div>
-              )}
-              {edit === c.id && (
-                <LimitEditor card={c} onSave={(limits) => { bank.updateCard(c.id, { limits }); setEdit(null); bank.toast('Limity boli uložené') }} />
-              )}
             </div>
-          )
-        })}
+            <span className={`pill ${card.status === 'aktívna' ? 'ok' : 'off'}`}>{card.status}</span>
+          </div>
+          <div className="detail-grid" style={{ margin: '12px 0' }}>
+            <div><div className="k">ATM / deň</div><div className="v">{formatMoney(card.limits.atm)}</div></div>
+            <div><div className="k">POS / deň</div><div className="v">{formatMoney(card.limits.pos)}</div></div>
+            <div><div className="k">Internet / deň</div><div className="v">{formatMoney(card.limits.online)}</div></div>
+            <div><div className="k">Bezkontaktne bez PIN</div><div className="v">{formatMoney(card.limits.contactless)}</div></div>
+          </div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <button
+              className={`btn btn-sm ${card.status === 'aktívna' ? 'btn-danger' : 'btn-soft'}`}
+              onClick={() => bank.updateCard(card.id, { status: card.status === 'aktívna' ? 'blokovaná' : 'aktívna' })}
+            >
+              {card.status === 'aktívna' ? 'Blokovať kartu' : 'Odblokovať'}
+            </button>
+            <button className="btn btn-sm btn-ghost" onClick={() => setPinFor(pinFor === card.id ? null : card.id)}>
+              Zobraziť PIN
+            </button>
+            <button className="btn btn-sm btn-ghost" onClick={() => setEdit(edit === card.id ? null : card.id)}>
+              Upraviť limity
+            </button>
+          </div>
+          {pinFor === card.id && (
+            <div style={{ marginTop: 12, background: '#f6f7f9', borderRadius: 10, padding: 12, fontSize: 14 }}>
+              PIN karty: <b className="mono" style={{ letterSpacing: '.2em' }}>{card.pin}</b>
+            </div>
+          )}
+          {edit === card.id && (
+            <LimitEditor card={card} onSave={(limits) => { bank.updateCard(card.id, { limits }); setEdit(null); bank.toast('Limity boli uložené') }} />
+          )}
+        </div>
       </div>
     </div>
   )
