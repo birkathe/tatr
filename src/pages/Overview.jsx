@@ -165,7 +165,7 @@ export default function Overview() {
               <div className="bar-row" key={k}>
                 <div style={{ fontSize: 13 }}>{t(`cat.${k}`)}</div>
                 <div className="bar-track">
-                  <div className="bar-fill" style={{ width: `${(v / (spent || 1)) * 100}%`, background: '#6a6e78' }} />
+                  <div className="bar-fill" style={{ width: `${(v / (spent || 1)) * 100}%`, background: '#0b6ef6' }} />
                 </div>
                 <div className="right mono" style={{ fontSize: 13 }}>{money(v)}</div>
               </div>
