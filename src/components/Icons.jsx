@@ -20,6 +20,7 @@ export function Icon({ name, size = 18 }) {
     eyeOff: <><path d="M3 3l18 18" /><path d="M10.6 10.6A3 3 0 0 0 13.4 13.4" /><path d="M7 7.4C4.6 8.8 3 12 3 12s4 7 10 7c1.8 0 3.4-.5 4.8-1.3" /><path d="M14.1 6.3A10 10 0 0 1 21 12s-1 1.8-2.7 3.5" /></>,
     sun: <><circle cx="12" cy="12" r="4" /><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4" /></>,
     moon: <><path d="M17.5 15.5A7 7 0 1 1 10 5a6 6 0 0 0 7.5 10.5z" /></>,
+    menu: <><path d="M4 7h16M4 12h16M4 17h16" /></>,
   }
   return <svg {...p}>{paths[name]}</svg>
 }

@@ -16,7 +16,7 @@ function Mark({ size = 36 }) {
   )
 }
 
-export default function Logo({ light = false, compact = false }) {
+export default function Logo({ light = false, compact = false, sub = true }) {
   const color = light ? '#fff' : '#0b0b10'
   return (
     <div className="tb-logo" style={{ color }} aria-label="Tatra banka">
@@ -24,7 +24,7 @@ export default function Logo({ light = false, compact = false }) {
       {!compact && (
         <div className="tb-logo-text">
           <div className="tb-wordmark">Tatra banka</div>
-          <div className="tb-logo-sub">Internet banking TB</div>
+          {sub && <div className="tb-logo-sub">Internet banking TB</div>}
         </div>
       )}
     </div>

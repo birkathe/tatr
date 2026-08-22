@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useBank } from './store/BankContext'
 import Layout from './components/Layout'
+import Landing from './pages/Landing'
 import Login from './pages/Login'
 import Overview from './pages/Overview'
 import Accounts from './pages/Accounts'
@@ -14,25 +15,22 @@ import Settings from './pages/Settings'
 import Messages from './pages/Messages'
 import { RatesPage, BranchesPage, ProductsPage, LoansPage, SecurityPage, HelpPage } from './pages/ExtraPages'
 
-function Guard({ children }) {
-  const { session } = useBank()
-  if (!session) return <Navigate to="/prihlasenie" replace />
-  return children
-}
-
 export default function App() {
   const { session } = useBank()
+
+  if (!session) {
+    return (
+      <Routes>
+        <Route path="/prihlasenie" element={<Login />} />
+        <Route path="*" element={<Landing />} />
+      </Routes>
+    )
+  }
+
   return (
     <Routes>
-      <Route path="/prihlasenie" element={session ? <Navigate to="/" replace /> : <Login />} />
-      <Route
-        path="/"
-        element={
-          <Guard>
-            <Layout />
-          </Guard>
-        }
-      >
+      <Route path="/prihlasenie" element={<Navigate to="/" replace />} />
+      <Route path="/" element={<Layout />}>
         <Route index element={<Overview />} />
         <Route path="ucty" element={<Accounts />} />
         <Route path="ucty/:id" element={<Accounts />} />

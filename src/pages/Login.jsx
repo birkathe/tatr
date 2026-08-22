@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import Logo from '../components/Logo'
 import { useBank } from '../store/BankContext'
 import { passwordMatches, pidMatches } from '../lib/auth'
@@ -31,7 +32,9 @@ export default function Login() {
   return (
     <div className="login-page">
       <div className="login-top">
-        <Logo light />
+        <Link to="/" className="logo-btn" style={{ color: 'inherit', textDecoration: 'none' }}>
+          <Logo light sub={false} />
+        </Link>
         <div className="login-top-right">
           <button type="button" className="icon-btn" onClick={toggleTheme} title={t('settings.theme')}>
             <Icon name={theme === 'dark' ? 'sun' : 'moon'} />
@@ -52,6 +55,7 @@ export default function Login() {
           </ul>
         </div>
         <form className="login-card" onSubmit={submit}>
+          <Link to="/" className="login-back">{t('landing.back')}</Link>
           <h2>{t('login.title')}</h2>
           <div className="sub">{t('login.sub')}</div>
           <div className="field">
