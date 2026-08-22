@@ -19,12 +19,12 @@ export const CATEGORIES = {
 }
 
 export const DEPOSIT_OFFERS = [
-  { months: 1, rate: 1.7, label: '1 mesiac' },
-  { months: 3, rate: 2.0, label: '3 mesiace' },
-  { months: 6, rate: 2.2, label: '6 mesiacov' },
-  { months: 12, rate: 2.5, label: '12 mesiacov' },
-  { months: 24, rate: 2.5, label: '24 mesiacov' },
-  { months: 36, rate: 2.5, label: '36 mesiacov' },
+  { months: 1, rate: 2.5, label: '1 mesiac' },
+  { months: 3, rate: 2.9, label: '3 mesiace' },
+  { months: 6, rate: 3.4, label: '6 mesiacov' },
+  { months: 12, rate: 3.8, label: '12 mesiacov' },
+  { months: 24, rate: 3.6, label: '24 mesiacov' },
+  { months: 36, rate: 3.5, label: '36 mesiacov' },
 ]
 
 export const FX = [
@@ -110,7 +110,7 @@ export function createSeed() {
   const currentBalance = 83.52
 
   return {
-    version: 8,
+    version: 9,
     user: {
       firstName: 'Yurii',
       lastName: 'Biriukov',
@@ -172,11 +172,11 @@ export function createSeed() {
         name: 'Digitálny termínovaný vklad',
         accountFrom: currentId,
         amount: 74500,
-        rate: 5.3,
+        rate: 4.6,
         months: 6,
         start: '2026-08-24T08:00:00.000Z',
         end: '2027-02-24T08:00:00.000Z',
-        interestExpected: 1974.25,
+        interestExpected: 1713.5,
         autoRenew: false,
         status: 'aktívny',
       },
@@ -221,7 +221,7 @@ export function createSeed() {
         id: 'msg_dep_74500',
         date: '2026-08-24T08:00:00.000Z',
         title: 'Digitálny termínovaný vklad 74 500 €',
-        body: 'Zriadili sme Digitálny termínovaný vklad 74 500,00 € na 6 mesiacov (24. 8. 2026 – 24. 2. 2027) so sadzbou 5,30 % p.a. Očakávaný úrok 1 974,25 €.',
+        body: 'Zriadili sme Digitálny termínovaný vklad 74 500,00 € na 6 mesiacov (24. 8. 2026 – 24. 2. 2027) so sadzbou 4,60 % p.a. Očakávaný úrok 1 713,50 €.',
         read: false,
         type: 'produkt',
       },

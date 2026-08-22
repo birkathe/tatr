@@ -95,7 +95,7 @@ export default function Cards() {
             </button>
           </div>
           {pinFor === card.id && (
-            <div style={{ marginTop: 12, background: '#f6f7f9', borderRadius: 10, padding: 12, fontSize: 14 }}>
+            <div className="pin-reveal">
               PIN karty: <b className="mono" style={{ letterSpacing: '.2em' }}>{card.pin}</b>
             </div>
           )}

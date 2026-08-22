@@ -57,8 +57,8 @@ export function MonthBars({ series }) {
       {series.map((s) => (
         <div key={s.label} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 110, width: '100%', justifyContent: 'center' }}>
-            <div title={`Príjem ${s.in}`} style={{ width: 10, height: `${(s.in / max) * 100}%`, background: '#147a3d', borderRadius: 4 }} />
-            <div title={`Výdavky ${s.out}`} style={{ width: 10, height: `${(s.out / max) * 100}%`, background: '#0b6ef6', borderRadius: 4 }} />
+            <div title={`Príjem ${s.in}`} style={{ width: 10, height: `${(s.in / max) * 100}%`, background: '#3d8f66', borderRadius: 1 }} />
+            <div title={`Výdavky ${s.out}`} style={{ width: 10, height: `${(s.out / max) * 100}%`, background: '#8a5a5a', borderRadius: 1 }} />
           </div>
           <div style={{ fontSize: 11, color: '#8b919c' }}>{s.label}</div>
         </div>

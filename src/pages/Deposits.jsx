@@ -25,6 +25,7 @@ export default function Deposits() {
   const active = bank.deposits.filter((d) => d.status === 'aktívny')
   const history = bank.deposits.filter((d) => d.status !== 'aktívny')
   const total = active.reduce((s, d) => s + d.amount, 0)
+  const bestRate = Math.max(0, ...active.map((d) => d.rate), ...DEPOSIT_OFFERS.map((o) => o.rate))
 
   function start(e) {
     e.preventDefault()
@@ -80,7 +81,7 @@ export default function Deposits() {
         </div>
         <div className="card kpi">
           <div className="l">Najlepšia sadzba</div>
-          <div className="v">5,30 % p.a.</div>
+          <div className="v">{bestRate.toFixed(2).replace('.', ',')} % p.a.</div>
           <div className="s">aktuálny vklad</div>
         </div>
       </div>
@@ -128,7 +129,7 @@ export default function Deposits() {
               </div>
               <input type="checkbox" checked={form.autoRenew} onChange={(e) => setForm({ ...form, autoRenew: e.target.checked })} />
             </label>
-            <div className="card-pad" style={{ background: '#f6f7f9', borderRadius: 12, margin: '12px 0' }}>
+            <div className="deposit-summary">
               <div className="detail-grid">
                 <div><div className="k">Úroková sadzba</div><div className="v">{offer?.rate.toFixed(2).replace('.', ',')} % p.a.</div></div>
                 <div><div className="k">Očakávaný úrok</div><div className="v">{formatMoney(interest)}</div></div>
