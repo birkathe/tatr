@@ -3,6 +3,7 @@ import { useBank } from '../store/BankContext'
 import AuthModal from '../components/AuthModal'
 import { formatIban, formatMoney } from '../lib/format'
 import { useI18n } from '../i18n/I18nContext'
+import Select from '../components/Select'
 
 const empty = { fromId: 'acc_personal', toName: '', toIban: '', amount: '', vs: '', ks: '0308', ss: '', note: '', instant: true }
 
@@ -105,12 +106,12 @@ export default function Payments() {
         <div className="grid grid-2">
           <form className="card card-pad" onSubmit={startPay}>
             <div className="field">
-              <label>Z účtu</label>
-              <select value={form.fromId} onChange={(e) => set('fromId', e.target.value)}>
-                {bank.accounts.filter((a) => a.balance >= 0 || a.id === 'acc_personal').map((a) => (
-                  <option key={a.id} value={a.id}>{a.name} · {formatMoney(a.available)}</option>
-                ))}
-              </select>
+              <label>{t('payments.from')}</label>
+              <Select
+                value={form.fromId}
+                onChange={(v) => set('fromId', v)}
+                options={bank.accounts.map((a) => ({ value: a.id, label: `${a.name} · ${formatMoney(a.available)}` }))}
+              />
             </div>
             <div className="field">
               <label>Meno príjemcu</label>

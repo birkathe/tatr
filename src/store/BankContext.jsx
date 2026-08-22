@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { createSeed, DEPOSIT_OFFERS } from '../data/seed'
 import { addMonths, uid } from '../lib/format'
 
-const STORAGE_KEY = 'tb-ib-demo-v7'
+const STORAGE_KEY = 'tb-ib-demo-v8'
 const SESSION_KEY = 'tb-ib-session'
 
 const BankContext = createContext(null)

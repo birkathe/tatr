@@ -110,7 +110,7 @@ export function createSeed() {
   const currentBalance = 83.52
 
   return {
-    version: 7,
+    version: 8,
     user: {
       firstName: 'Yurii',
       lastName: 'Biriukov',
@@ -119,7 +119,7 @@ export function createSeed() {
       email: 'yurabirka@email.sk',
       phone: '+421 903 441 228',
       address: 'Hlavná 68, 040 01 Košice',
-      clientFrom: '2018-03-12',
+      clientFrom: '2021-09-15',
       branch: 'Košice – Hlavná',
     },
     settings: {
@@ -146,7 +146,7 @@ export function createSeed() {
         overdraftLimit: 500,
         overdraftUsed: 0,
         favorite: true,
-        opened: '2018-03-12',
+        opened: '2021-09-15',
         color: '#0b0b10',
       },
     ],
@@ -201,7 +201,7 @@ export function createSeed() {
         toName: 'Orange Slovensko, a.s.',
         amount: 29.9,
         day: 15,
-        next: '2026-07-15',
+        next: '2026-09-15',
         active: true,
       },
       {
@@ -212,7 +212,7 @@ export function createSeed() {
         toName: 'VSE Energia, a.s.',
         amount: 84.3,
         day: 10,
-        next: '2026-07-10',
+        next: '2026-09-10',
         active: true,
       },
     ],

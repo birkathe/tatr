@@ -4,6 +4,7 @@ import { DEPOSIT_OFFERS } from '../data/seed'
 import AuthModal from '../components/AuthModal'
 import { formatDate, formatMoney } from '../lib/format'
 import { useI18n } from '../i18n/I18nContext'
+import Select from '../components/Select'
 
 export default function Deposits() {
   const bank = useBank()
@@ -95,12 +96,12 @@ export default function Deposits() {
           </p>
           <form onSubmit={start}>
             <div className="field">
-              <label>Zdrojový účet</label>
-              <select value={form.fromId} onChange={(e) => setForm({ ...form, fromId: e.target.value })}>
-                {bank.accounts.filter((a) => a.id !== 'acc_credit').map((a) => (
-                  <option key={a.id} value={a.id}>{a.name} · dostupné {formatMoney(a.available)}</option>
-                ))}
-              </select>
+              <label>{t('deposits.from')}</label>
+              <Select
+                value={form.fromId}
+                onChange={(v) => setForm({ ...form, fromId: v })}
+                options={bank.accounts.map((a) => ({ value: a.id, label: `${a.name} · ${formatMoney(a.available)}` }))}
+              />
             </div>
             <div className="field">
               <label>Suma vkladu</label>

@@ -4,6 +4,7 @@ import { useBank } from '../store/BankContext'
 import { CATEGORIES } from '../data/seed'
 import { formatIban } from '../lib/format'
 import { useI18n } from '../i18n/I18nContext'
+import Select from '../components/Select'
 
 export default function Accounts() {
   const { id } = useParams()
@@ -39,8 +40,11 @@ export default function Accounts() {
       .sort((a, b) => new Date(b.date) - new Date(a.date))
   }, [bank.transactions, selected, q, cat, dir])
 
-  const outSum = txs.filter((tx) => tx.amount < 0).reduce((s, tx) => s + tx.amount, 0)
-  const inSum = txs.filter((tx) => tx.amount > 0).reduce((s, tx) => s + tx.amount, 0)
+  const now = new Date()
+  const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+  const monthTx = (bank.transactions || []).filter((tx) => selected && tx.accountId === selected.id && tx.date.startsWith(month))
+  const inSum = monthTx.filter((tx) => tx.amount > 0).reduce((s, tx) => s + tx.amount, 0)
+  const outSum = monthTx.filter((tx) => tx.amount < 0).reduce((s, tx) => s + Math.abs(tx.amount), 0)
 
   function exportCsv() {
     const rows = [['Dátum', 'Názov', 'Kategória', 'Suma', 'Mena', 'VS', 'Poznámka', 'Zostatok']]
@@ -130,12 +134,14 @@ export default function Accounts() {
 
       <div className="filters">
         <input placeholder={t('accounts.search')} value={q} onChange={(e) => setQ(e.target.value)} style={{ minWidth: 220 }} />
-        <select value={cat} onChange={(e) => setCat(e.target.value)}>
-          <option value="all">{t('accounts.allCats')}</option>
-          {Object.keys(CATEGORIES).map((k) => (
-            <option key={k} value={k}>{t(`cat.${k}`)}</option>
-          ))}
-        </select>
+        <Select
+          value={cat}
+          onChange={setCat}
+          options={[
+            { value: 'all', label: t('accounts.allCats') },
+            ...Object.keys(CATEGORIES).map((k) => ({ value: k, label: t(`cat.${k}`) })),
+          ]}
+        />
         <button className={`chip ${dir === 'all' ? 'on' : ''}`} onClick={() => setDir('all')}>{t('accounts.all')}</button>
         <button className={`chip ${dir === 'in' ? 'on' : ''}`} onClick={() => setDir('in')}>{t('accounts.in')}</button>
         <button className={`chip ${dir === 'out' ? 'on' : ''}`} onClick={() => setDir('out')}>{t('accounts.out')}</button>
