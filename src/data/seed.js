@@ -19,12 +19,12 @@ export const CATEGORIES = {
 }
 
 export const DEPOSIT_OFFERS = [
-  { months: 1, rate: 2.5, label: '1 mesiac' },
-  { months: 3, rate: 2.9, label: '3 mesiace' },
-  { months: 6, rate: 3.4, label: '6 mesiacov' },
-  { months: 12, rate: 3.8, label: '12 mesiacov' },
-  { months: 24, rate: 3.6, label: '24 mesiacov' },
-  { months: 36, rate: 3.5, label: '36 mesiacov' },
+  { months: 1, rate: 3.7, label: '1 mesiac' },
+  { months: 3, rate: 4.1, label: '3 mesiace' },
+  { months: 6, rate: 4.6, label: '6 mesiacov' },
+  { months: 12, rate: 5.0, label: '12 mesiacov' },
+  { months: 24, rate: 4.8, label: '24 mesiacov' },
+  { months: 36, rate: 4.7, label: '36 mesiacov' },
 ]
 
 export const FX = [
