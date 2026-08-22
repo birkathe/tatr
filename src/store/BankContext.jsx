@@ -36,6 +36,7 @@ export function BankProvider({ children }) {
 
   function login() {
     localStorage.setItem(SESSION_KEY, '1')
+    localStorage.setItem('tb-ib-last-login', new Date().toISOString())
     setSession(true)
   }
 

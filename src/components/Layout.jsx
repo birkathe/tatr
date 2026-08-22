@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import Logo from './Logo'
 import { Icon } from './Icons'
 import { useBank } from '../store/BankContext'
@@ -9,7 +9,9 @@ export default function Layout() {
   const bank = useBank()
   const { t } = useI18n()
   const nav = useNavigate()
+  const loc = useLocation()
   const [q, setQ] = useState('')
+  const [more, setMore] = useState(false)
   const unread = bank.messages.filter((m) => !m.read).length
 
   const NAV = [
@@ -25,6 +27,15 @@ export default function Layout() {
     { to: '/nastavenia', label: t('nav.settings'), icon: 'gear' },
   ]
 
+  const tabs = [
+    NAV[0],
+    NAV[2],
+    NAV[3],
+    NAV[4],
+  ]
+  const extra = NAV.filter((n) => !tabs.includes(n))
+  const extraActive = extra.some((n) => (n.end ? loc.pathname === n.to : loc.pathname.startsWith(n.to)))
+
   function search(e) {
     e.preventDefault()
     nav(`/ucty?q=${encodeURIComponent(q.trim())}`)
@@ -36,7 +47,7 @@ export default function Layout() {
         <strong>DEMO</strong> — {t('demo').replace(/^DEMO — /, '')}
       </div>
       <header className="topbar">
-        <button type="button" onClick={() => nav('/')} style={{ background: 'none', border: 0, padding: 0, color: 'inherit' }}>
+        <button type="button" className="logo-btn" onClick={() => nav('/')}>
           <Logo light compact={false} />
         </button>
         <form className="search" onSubmit={search}>
@@ -60,7 +71,7 @@ export default function Layout() {
               <span>PID {bank.user.pid}</span>
             </span>
           </button>
-          <button className="icon-btn" onClick={bank.logout} title={t('logout')}>
+          <button className="icon-btn desktop-only" onClick={bank.logout} title={t('logout')}>
             <Icon name="logout" />
           </button>
         </div>
@@ -90,13 +101,34 @@ export default function Layout() {
         </main>
       </div>
       <nav className="mobile-nav">
-        {NAV.slice(0, 5).map((n) => (
+        {tabs.map((n) => (
           <NavLink key={n.to} to={n.to} end={n.end} className={({ isActive }) => (isActive ? 'active' : '')}>
-            <Icon name={n.icon} size={18} />
-            {n.label.split(' ')[0]}
+            <Icon name={n.icon} size={20} />
+            <span>{n.label.split(' ')[0]}</span>
           </NavLink>
         ))}
+        <button type="button" className={extraActive || more ? 'active' : ''} onClick={() => setMore(true)}>
+          <Icon name="gear" size={20} />
+          <span>{t('more')}</span>
+        </button>
       </nav>
+      {more && (
+        <div className="more-sheet" onClick={() => setMore(false)}>
+          <div className="more-panel" onClick={(e) => e.stopPropagation()}>
+            <div className="more-handle" />
+            <h3>{t('more')}</h3>
+            {extra.map((n) => (
+              <NavLink key={n.to} to={n.to} end={n.end} className="more-link" onClick={() => setMore(false)}>
+                <Icon name={n.icon} /> {n.label}
+                {n.to === '/spravy' && unread > 0 && <span className="pill ok">{unread}</span>}
+              </NavLink>
+            ))}
+            <button type="button" className="more-link danger" onClick={() => { setMore(false); bank.logout() }}>
+              <Icon name="logout" /> {t('logout')}
+            </button>
+          </div>
+        </div>
+      )}
       <div className="toasts">
         {bank.toasts.map((toast) => (
           <div key={toast.id} className={`toast ${toast.tone === 'err' ? 'err' : ''}`}>

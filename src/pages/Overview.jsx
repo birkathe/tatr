@@ -25,6 +25,12 @@ export default function Overview() {
     byCat[tx.category] = (byCat[tx.category] || 0) + Math.abs(tx.amount)
   })
   const topCats = Object.entries(byCat).sort((a, b) => b[1] - a[1]).slice(0, 4)
+  const lastLogin = localStorage.getItem('tb-ib-last-login')
+
+  function copyIban(iban) {
+    const raw = (iban || '').replace(/\s/g, '')
+    navigator.clipboard?.writeText(raw).then(() => bank.toast(t('copied')))
+  }
 
   return (
     <div>
@@ -32,8 +38,11 @@ export default function Overview() {
         <div>
           <h1>{greet()}, {bank.user.firstName}</h1>
           <p>{now.toLocaleDateString(tag, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })} · Košice</p>
+          {lastLogin && (
+            <p className="last-login">{t('lastLogin')}: {date(lastLogin)} {new Date(lastLogin).toLocaleTimeString(tag, { hour: '2-digit', minute: '2-digit' })}</p>
+          )}
         </div>
-        <div className="page-actions">
+        <div className="page-actions desktop-only">
           <Link to="/platby" className="btn btn-primary" style={{ width: 'auto', textDecoration: 'none' }}>
             <Icon name="send" size={16} /> {t('overview.newPayment')}
           </Link>
@@ -66,16 +75,42 @@ export default function Overview() {
         </div>
       </div>
 
-      <div className="grid" style={{ gridTemplateColumns: '1fr', marginBottom: 16 }}>
+      <div className="home-account">
         {bank.accounts.map((a) => (
-          <Link key={a.id} to={`/ucty/${a.id}`} className="card acc-tile" style={{ background: a.color, maxWidth: 560 }}>
+          <div key={a.id} className="card acc-tile" style={{ background: a.color }}>
             <div className="prod">{t('product.current')}</div>
             <div className="name">{t('product.personal')}</div>
-            <div className="iban">{formatIban(a.iban)}</div>
+            <button type="button" className="iban-copy" onClick={() => copyIban(a.iban)}>
+              {formatIban(a.iban)} · {t('copy')}
+            </button>
             <div className="bal">{hide ? '•••• €' : money(a.balance)}</div>
             <div className="sub">{t('overview.available')} {hide ? '••••' : money(a.available)}</div>
-          </Link>
+            <div className="acc-tile-actions">
+              <Link to="/ucty/acc_personal">{t('overview.allMoves')}</Link>
+              <button type="button" onClick={() => bank.updateSettings({ hideBalances: !hide })}>
+                {hide ? t('login.show') : t('login.hide')}
+              </button>
+            </div>
+          </div>
         ))}
+      </div>
+      <div className="quick-row">
+        <Link to="/platby" className="quick-item">
+          <span className="quick-ico"><Icon name="send" size={18} /></span>
+          {t('overview.newPayment')}
+        </Link>
+        <Link to="/vklady" className="quick-item">
+          <span className="quick-ico"><Icon name="vault" size={18} /></span>
+          {t('nav.deposits')}
+        </Link>
+        <Link to="/karty" className="quick-item">
+          <span className="quick-ico"><Icon name="card" size={18} /></span>
+          {t('nav.cards')}
+        </Link>
+        <Link to="/prijemcovia" className="quick-item">
+          <span className="quick-ico"><Icon name="users" size={18} /></span>
+          {t('nav.recipients')}
+        </Link>
       </div>
 
       <div className="grid grid-2">
