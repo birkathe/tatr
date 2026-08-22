@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import Logo from '../components/Logo'
-import AuthModal from '../components/AuthModal'
 import { useBank } from '../store/BankContext'
 import { passwordMatches, pidMatches } from '../lib/auth'
 import { LangSwitch, useI18n } from '../i18n/I18nContext'
@@ -12,7 +11,6 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [showPass, setShowPass] = useState(false)
   const [error, setError] = useState('')
-  const [step, setStep] = useState('form')
 
   function submit(e) {
     e.preventDefault()
@@ -24,16 +22,14 @@ export default function Login() {
       setError(t('login.wrong'))
       return
     }
-    setError('')
-    setStep('auth')
+    login()
   }
 
   return (
     <div className="login-page">
-      <div className="demo-bar">{t('loginDemo')}</div>
       <div className="login-top">
         <Logo light />
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        <div className="login-top-right">
           <LangSwitch light />
           <div className="meta">{t('dialog')}</div>
         </div>
@@ -86,15 +82,6 @@ export default function Login() {
           <button className="btn btn-primary" type="submit">{t('login.submit')}</button>
         </form>
       </div>
-      <div className="login-footer">{t('login.footer')}</div>
-      {step === 'auth' && (
-        <AuthModal
-          title={t('login.authTitle')}
-          lead={t('login.authLead')}
-          onCancel={() => setStep('form')}
-          onConfirm={login}
-        />
-      )}
     </div>
   )
 }

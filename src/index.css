@@ -49,14 +49,23 @@ button { cursor: pointer; }
   display: flex;
   flex-direction: column;
   gap: 3px;
-  line-height: 1;
+  line-height: 1.05;
+  min-width: 0;
+  overflow: visible;
+}
+.tb-wordmark {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
 }
 .tb-logo-sub {
-  font-size: 9.5px;
-  letter-spacing: 0.09em;
+  font-size: 10px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.72;
   font-weight: 500;
+  white-space: nowrap;
 }
 .lang-switch {
   display: inline-flex;
@@ -91,35 +100,37 @@ button { cursor: pointer; }
   display: flex;
   flex-direction: column;
   background:
-    radial-gradient(1200px 500px at 80% -10%, rgba(11, 110, 246, 0.18), transparent 50%),
-    linear-gradient(180deg, #0b0b10 0 280px, #f3f4f6 280px 100%);
+    radial-gradient(900px 420px at 85% 10%, rgba(11, 110, 246, 0.16), transparent 55%),
+    #0b0b10;
 }
 .login-top {
-  height: 72px;
+  min-height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
+  gap: 16px;
+  padding: 12px 32px;
   color: #fff;
 }
-.login-top .meta { color: #a9adb6; font-size: 13px; }
+.login-top-right { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+.login-top .meta { color: #a9adb6; font-size: 13px; white-space: nowrap; }
 .login-wrap {
   flex: 1;
   display: grid;
-  grid-template-columns: 1fr 440px;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 440px);
   gap: 56px;
   max-width: 1080px;
   width: 100%;
-  margin: 24px auto 40px;
-  padding: 0 24px 40px;
-  align-items: start;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+  align-items: center;
 }
 .login-hero h1 {
   color: #fff;
   font-size: 40px;
   font-weight: 600;
   letter-spacing: -0.035em;
-  margin: 48px 0 12px;
+  margin: 0 0 14px;
   line-height: 1.15;
 }
 .login-hero p { color: #c5c8d0; font-size: 16px; line-height: 1.55; max-width: 460px; }
@@ -499,10 +510,10 @@ table.data tr:hover td { background: #fafafa; }
 @media (max-width: 1100px) {
   .grid-3, .grid-4, .grid-eq { grid-template-columns: 1fr 1fr; }
   .grid-2 { grid-template-columns: 1fr; }
-  .login-wrap { grid-template-columns: 1fr; }
-  .login-hero h1 { margin-top: 8px; font-size: 32px; color: var(--ink); }
-  .login-hero p { color: var(--muted); }
-  .login-points { color: var(--ink-2); }
+  .login-wrap { grid-template-columns: 1fr; align-items: start; }
+  .login-hero h1 { margin-top: 8px; font-size: 32px; color: #fff; }
+  .login-hero p { color: #c5c8d0; }
+  .login-points { color: #d0d3da; }
   .login-card { margin-top: 4px; }
   .tb-logo-sub { display: none; }
 }
@@ -562,7 +573,7 @@ table.data tr:hover td { background: #fafafa; }
   .login-hero { display: none; }
   .login-wrap { padding: 12px 16px 24px; margin: 0 auto; }
   .login-card { margin-top: 8px; padding: 22px 18px; }
-  .login-top { padding: 0 16px; height: 60px; }
+  .login-top { padding: 0 16px; min-height: 60px; }
   .login-top .meta { display: none; }
   .field input, .field select, .field textarea { font-size: 16px; }
   .btn { min-height: 46px; }
