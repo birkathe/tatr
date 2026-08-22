@@ -37,12 +37,15 @@ export const FX = [
 ]
 
 const TX = [
-  { day: '2026-06-17', h: 18, m: 41, name: 'Lidl Košice – Moldavská', cat: 'potraviny', amt: -28.47, type: 'karta', note: 'POS nákup Košice' },
-  { day: '2026-06-17', h: 7, m: 12, name: 'Slovnaft Košice Južná', cat: 'doprava', amt: -52.3, type: 'karta', note: 'PHM' },
-  { day: '2026-06-16', h: 16, m: 40, name: 'Dr. Max OC Optima', cat: 'zdravie', amt: -14.25, type: 'karta' },
-  { day: '2026-06-16', h: 9, m: 0, name: 'PixelForge s.r.o.', cat: 'prijem', amt: 2140, type: 'mzda', note: 'Mzda za jún 2026' },
-  { day: '2026-06-14', h: 13, m: 25, name: 'Tesco Extra Toryská', cat: 'potraviny', amt: -67.42, type: 'karta' },
-  { day: '2026-06-12', h: 19, m: 8, name: 'Cinema City Aupark KE', cat: 'zabava', amt: -18.4, type: 'karta' },
+  { day: '2026-06-17', h: 18, m: 41, name: 'Lidl Košice – Moldavská', cat: 'potraviny', amt: -32.18, type: 'karta', note: 'POS nákup' },
+  { day: '2026-06-17', h: 7, m: 28, name: 'Slovnaft Košice Južná', cat: 'doprava', amt: -35.40, type: 'karta', note: 'PHM' },
+  { day: '2026-06-16', h: 16, m: 40, name: 'Dr. Max OC Optima', cat: 'zdravie', amt: -12.90, type: 'karta' },
+  { day: '2026-06-15', h: 11, m: 20, name: 'Kateryna Horbach', cat: 'transfer', amt: -200, type: 'sepa', vs: '20260615', note: 'Prevod', iban: 'SK42 0200 0000 0036 8841 2210' },
+  { day: '2026-06-14', h: 13, m: 25, name: 'Kaufland Košice', cat: 'potraviny', amt: -54.62, type: 'karta' },
+  { day: '2026-06-13', h: 9, m: 12, name: 'Lidl Košice – Moldavská', cat: 'potraviny', amt: -27.35, type: 'karta' },
+  { day: '2026-06-12', h: 17, m: 48, name: 'Kaufland Košice', cat: 'potraviny', amt: -41.90, type: 'karta' },
+  { day: '2026-06-11', h: 8, m: 5, name: 'Lidl Košice – Šaca', cat: 'potraviny', amt: -19.74, type: 'karta' },
+  { day: '2026-06-10', h: 9, m: 0, name: 'PixelForge s.r.o.', cat: 'prijem', amt: 2140, type: 'mzda', note: 'Mzda za jún 2026' },
   { day: '2026-06-10', h: 10, m: 15, name: 'VSE Energia', cat: 'byvanie', amt: -84.3, type: 'inkaso', note: 'Záloha elektrina Košice' },
   { day: '2026-06-08', h: 15, m: 2, name: 'Decathlon Košice', cat: 'nakupovanie', amt: -54.99, type: 'karta' },
   { day: '2026-06-06', h: 12, m: 30, name: 'KFC Aupark Košice', cat: 'restauracie', amt: -12.7, type: 'karta' },
@@ -93,7 +96,7 @@ export function createSeed() {
     ks: t.type === 'sepa' ? '0308' : '',
     ss: '',
     note: t.note || '',
-    iban: t.type === 'sepa' ? 'SK31 0900 0000 0001 7123 4567' : '',
+    iban: t.iban || (t.type === 'sepa' ? 'SK31 0900 0000 0001 7123 4567' : ''),
     status: 'zaúčtovaná',
     balanceAfter: 0,
   }))
@@ -107,7 +110,7 @@ export function createSeed() {
   const currentBalance = 83.52
 
   return {
-    version: 6,
+    version: 7,
     user: {
       firstName: 'Yurii',
       lastName: 'Biriukov',
@@ -179,16 +182,40 @@ export function createSeed() {
       },
     ],
     recipients: [
-      { id: 'rcp_1', name: 'Martin Novák', iban: 'SK31 0900 0000 0001 7123 4567', bank: 'Slovenská sporiteľňa', vs: '', note: 'Kamoš' },
-      { id: 'rcp_2', name: 'ZSE Energia, a.s.', iban: 'SK15 1100 0000 0026 2610 0642', bank: 'Tatra banka', vs: '44018372', note: 'Elektrina' },
+      { id: 'rcp_kh', name: 'Kateryna Horbach', iban: 'SK42 0200 0000 0036 8841 2210', bank: 'VÚB', vs: '', note: '' },
+      { id: 'rcp_1', name: 'Martin Novák', iban: 'SK31 0900 0000 0001 7123 4567', bank: 'Slovenská sporiteľňa', vs: '', note: '' },
+      { id: 'rcp_2', name: 'VSE Energia, a.s.', iban: 'SK15 1100 0000 0026 2610 0642', bank: 'Tatra banka', vs: '44018372', note: 'Elektrina' },
       { id: 'rcp_3', name: 'Orange Slovensko, a.s.', iban: 'SK07 0200 0000 0018 0350 4058', bank: 'VÚB', vs: '903441228', note: 'Mobil' },
-      { id: 'rcp_4', name: 'Jana Kováčová', iban: 'SK42 0200 0000 0036 8841 2210', bank: 'VÚB', vs: '', note: 'Sestra' },
     ],
     templates: [
-      { id: 'tpl_1', name: 'Nájomné', recipientId: 'rcp_4', amount: 450, vs: '202608', note: 'Nájom august' },
+      { id: 'tpl_kh', name: 'Kateryna Horbach', recipientId: 'rcp_kh', amount: 200, vs: '', note: 'Prevod' },
       { id: 'tpl_2', name: 'Orange', recipientId: 'rcp_3', amount: 29.9, vs: '903441228', note: 'Faktúra' },
+      { id: 'tpl_3', name: 'VSE Energia', recipientId: 'rcp_2', amount: 84.3, vs: '44018372', note: 'Záloha' },
     ],
-    standingOrders: [],
+    standingOrders: [
+      {
+        id: 'so_orange',
+        name: 'Orange Slovensko',
+        from: currentId,
+        toIban: 'SK07 0200 0000 0018 0350 4058',
+        toName: 'Orange Slovensko, a.s.',
+        amount: 29.9,
+        day: 15,
+        next: '2026-07-15',
+        active: true,
+      },
+      {
+        id: 'so_vse',
+        name: 'VSE Energia',
+        from: currentId,
+        toIban: 'SK15 1100 0000 0026 2610 0642',
+        toName: 'VSE Energia, a.s.',
+        amount: 84.3,
+        day: 10,
+        next: '2026-07-10',
+        active: true,
+      },
+    ],
     messages: [
       {
         id: 'msg_dep_74500',

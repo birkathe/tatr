@@ -12,6 +12,7 @@ import Recipients from './pages/Recipients'
 import Documents from './pages/Documents'
 import Settings from './pages/Settings'
 import Messages from './pages/Messages'
+import { RatesPage, BranchesPage, ProductsPage, LoansPage, SecurityPage, HelpPage } from './pages/ExtraPages'
 
 function Guard({ children }) {
   const { session } = useBank()
@@ -43,6 +44,12 @@ export default function App() {
         <Route path="dokumenty" element={<Documents />} />
         <Route path="nastavenia" element={<Settings />} />
         <Route path="spravy" element={<Messages />} />
+        <Route path="kurzy" element={<RatesPage />} />
+        <Route path="pobocky" element={<BranchesPage />} />
+        <Route path="produkty" element={<ProductsPage />} />
+        <Route path="uvery" element={<LoansPage />} />
+        <Route path="bezpecnost" element={<SecurityPage />} />
+        <Route path="pomoc" element={<HelpPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

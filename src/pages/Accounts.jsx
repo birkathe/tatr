@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { useBank } from '../store/BankContext'
 import { CATEGORIES } from '../data/seed'
 import { formatIban } from '../lib/format'
 import { useI18n } from '../i18n/I18nContext'
+import { AccountExtras } from './ExtraPages'
 
 export default function Accounts() {
   const { id } = useParams()
   const bank = useBank()
   const { t, money, date, dateTime } = useI18n()
-  const nav = useNavigate()
   const selected = bank.accounts.find((a) => a.id === id) || bank.accounts[0]
   const [params] = useSearchParams()
   const [q, setQ] = useState(params.get('q') || '')
@@ -63,25 +63,14 @@ export default function Accounts() {
         </div>
       </div>
 
-      <div className="grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', marginBottom: 16 }}>
-        {bank.accounts.map((a) => (
-          <button
-            key={a.id}
-            className="card card-pad"
-            onClick={() => nav(`/ucty/${a.id}`)}
-            style={{
-              textAlign: 'left',
-              borderColor: selected.id === a.id ? 'var(--blue)' : undefined,
-              boxShadow: selected.id === a.id ? '0 0 0 3px rgba(11,110,246,.12)' : undefined,
-            }}
-          >
-            <div style={{ fontSize: 12, color: 'var(--muted)' }}>{a.product}</div>
-            <div style={{ fontWeight: 600, marginTop: 2 }}>{a.name}</div>
-            <div style={{ fontSize: 22, fontWeight: 650, letterSpacing: '-0.03em', margin: '10px 0 4px' }}>{money(a.balance)}</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)' }}>{formatIban(a.iban)}</div>
-          </button>
-        ))}
+      <div className="card acc-tile" style={{ background: selected.color, marginBottom: 16, minHeight: 160 }}>
+        <div className="prod">{selected.product}</div>
+        <div className="name">{selected.name}</div>
+        <div className="iban">{formatIban(selected.iban)}</div>
+        <div className="bal">{money(selected.balance)}</div>
+        <div className="sub">{t('overview.available')} {money(selected.available)}</div>
       </div>
+      <AccountExtras />
 
       <div className="card card-pad" style={{ marginBottom: 16 }}>
         <div className="detail-grid">

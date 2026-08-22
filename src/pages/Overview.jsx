@@ -7,9 +7,8 @@ import { useI18n } from '../i18n/I18nContext'
 
 export default function Overview() {
   const bank = useBank()
-  const { t, money, date, greet, tag, monthName } = useI18n()
+  const { t, money, date, greet, tag } = useI18n()
   const hide = bank.settings.hideBalances
-  const current = bank.accounts.find((a) => a.id === 'acc_personal')
   const deposits = bank.deposits.filter((d) => d.status === 'aktívny')
   const depSum = deposits.reduce((s, d) => s + d.amount, 0)
   const assets = bank.accounts.reduce((s, a) => s + Math.max(0, a.balance), 0) + depSum
@@ -17,20 +16,12 @@ export default function Overview() {
   const lastLogin = localStorage.getItem('tb-ib-last-login')
   const msgs = bank.messages.slice(0, 3)
 
-  const monthsWithSpend = {}
-  bank.transactions.forEach((tx) => {
-    if (tx.amount >= 0 || tx.category === 'vklad') return
-    const key = tx.date.slice(0, 7)
-    monthsWithSpend[key] = (monthsWithSpend[key] || 0) + Math.abs(tx.amount)
-  })
-  const spendMonth = Object.keys(monthsWithSpend).sort().reverse()[0]
-  const spendTx = spendMonth
-    ? bank.transactions.filter((tx) => tx.date.startsWith(spendMonth) && tx.amount < 0 && tx.category !== 'vklad')
-    : []
+  const now = new Date()
+  const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+  const monthTx = bank.transactions.filter((tx) => tx.date.startsWith(month))
+  const spendTx = monthTx.filter((tx) => tx.amount < 0 && tx.category !== 'vklad')
   const spent = spendTx.reduce((s, tx) => s + Math.abs(tx.amount), 0)
-  const income = spendMonth
-    ? bank.transactions.filter((tx) => tx.date.startsWith(spendMonth) && tx.amount > 0).reduce((s, tx) => s + tx.amount, 0)
-    : 0
+  const income = monthTx.filter((tx) => tx.amount > 0).reduce((s, tx) => s + tx.amount, 0)
   const byCat = {}
   spendTx.forEach((tx) => {
     byCat[tx.category] = (byCat[tx.category] || 0) + Math.abs(tx.amount)
@@ -65,7 +56,7 @@ export default function Overview() {
           <b>{hide ? '••••' : money(assets)}</b>
         </div>
         <div className="kpi-inline">
-          <span>{t('overview.spent')}{spendMonth ? ` · ${monthName(spendMonth)}` : ''}</span>
+          <span>{t('overview.spent')}</span>
           <b>{hide ? '••••' : money(spent)}</b>
         </div>
         <div className="kpi-inline">
@@ -166,7 +157,7 @@ export default function Overview() {
               <Link to="/vydavky">Detail</Link>
             </div>
             <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 10 }}>
-              {spendMonth ? monthName(spendMonth) : t('overview.noSpend')}
+              {now.toLocaleDateString(tag, { month: 'long', year: 'numeric' })}
             </div>
             {topCats.length === 0 ? (
               <div className="empty" style={{ padding: '12px 0' }}>{t('overview.noSpend')}</div>

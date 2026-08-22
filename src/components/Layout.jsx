@@ -24,6 +24,12 @@ export default function Layout() {
     { to: '/dokumenty', label: t('nav.documents'), icon: 'file' },
     { to: '/spravy', label: t('nav.messages'), icon: 'inbox' },
     { to: '/nastavenia', label: t('nav.settings'), icon: 'gear' },
+    { to: '/kurzy', label: t('nav.rates'), icon: 'chart' },
+    { to: '/pobocky', label: t('nav.branches'), icon: 'home' },
+    { to: '/produkty', label: t('nav.products'), icon: 'wallet' },
+    { to: '/uvery', label: t('nav.loans'), icon: 'file' },
+    { to: '/bezpecnost', label: t('nav.security'), icon: 'gear' },
+    { to: '/pomoc', label: t('nav.help'), icon: 'inbox' },
   ]
 
   const tabs = [NAV[0], NAV[2], NAV[3], NAV[4]]
