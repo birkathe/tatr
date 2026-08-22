@@ -3,7 +3,7 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import Logo from './Logo'
 import { Icon } from './Icons'
 import { useBank } from '../store/BankContext'
-import { LangSwitch, useI18n } from '../i18n/I18nContext'
+import { useI18n } from '../i18n/I18nContext'
 
 export default function Layout() {
   const bank = useBank()
@@ -12,7 +12,6 @@ export default function Layout() {
   const loc = useLocation()
   const [q, setQ] = useState('')
   const [more, setMore] = useState(false)
-  const unread = bank.messages.filter((m) => !m.read).length
 
   const NAV = [
     { to: '/', label: t('nav.overview'), icon: 'home', end: true },
@@ -27,12 +26,7 @@ export default function Layout() {
     { to: '/nastavenia', label: t('nav.settings'), icon: 'gear' },
   ]
 
-  const tabs = [
-    NAV[0],
-    NAV[2],
-    NAV[3],
-    NAV[4],
-  ]
+  const tabs = [NAV[0], NAV[2], NAV[3], NAV[4]]
   const extra = NAV.filter((n) => !tabs.includes(n))
   const extraActive = extra.some((n) => (n.end ? loc.pathname === n.to : loc.pathname.startsWith(n.to)))
 
@@ -43,9 +37,6 @@ export default function Layout() {
 
   return (
     <div className="app-shell">
-      <div className="demo-bar">
-        <strong>DEMO</strong> — {t('demo').replace(/^DEMO — /, '')}
-      </div>
       <header className="topbar">
         <button type="button" className="logo-btn" onClick={() => nav('/')}>
           <Logo light compact={false} />
@@ -59,10 +50,8 @@ export default function Layout() {
           />
         </form>
         <div className="topbar-right">
-          <LangSwitch light />
           <button className="icon-btn" onClick={() => nav('/spravy')} title={t('nav.messages')}>
             <Icon name="bell" />
-            {unread > 0 && <span className="badge">{unread}</span>}
           </button>
           <button className="user-chip" onClick={() => nav('/nastavenia')}>
             <span className="avatar">{bank.user.firstName[0]}{bank.user.lastName[0]}</span>
@@ -120,7 +109,6 @@ export default function Layout() {
             {extra.map((n) => (
               <NavLink key={n.to} to={n.to} end={n.end} className="more-link" onClick={() => setMore(false)}>
                 <Icon name={n.icon} /> {n.label}
-                {n.to === '/spravy' && unread > 0 && <span className="pill ok">{unread}</span>}
               </NavLink>
             ))}
             <button type="button" className="more-link danger" onClick={() => { setMore(false); bank.logout() }}>
