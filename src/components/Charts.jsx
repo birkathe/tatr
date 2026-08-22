@@ -6,7 +6,7 @@ export function Donut({ slices, size = 148, center }) {
   return (
     <div className="donut-wrap">
       <svg width={size} height={size} viewBox="0 0 148 148">
-        <circle cx="74" cy="74" r={r} fill="none" stroke="#e8eaee" strokeWidth="16" />
+        <circle cx="74" cy="74" r={r} fill="none" stroke="var(--bar-track)" strokeWidth="16" />
         {slices.map((sl) => {
           const len = (sl.value / total) * c
           const el = (
@@ -28,12 +28,12 @@ export function Donut({ slices, size = 148, center }) {
           return el
         })}
         {center && (
-          <text x="74" y="70" textAnchor="middle" fontSize="11" fill="#8b919c">
+          <text x="74" y="70" textAnchor="middle" fontSize="11" fill="var(--muted)">
             {center.top}
           </text>
         )}
         {center && (
-          <text x="74" y="90" textAnchor="middle" fontSize="15" fontWeight="650" fill="#1c1d21">
+          <text x="74" y="90" textAnchor="middle" fontSize="15" fontWeight="650" fill="var(--ink)">
             {center.bottom}
           </text>
         )}
@@ -60,7 +60,7 @@ export function MonthBars({ series }) {
             <div title={`Príjem ${s.in}`} style={{ width: 10, height: `${(s.in / max) * 100}%`, background: '#147a3d', borderRadius: 4 }} />
             <div title={`Výdavky ${s.out}`} style={{ width: 10, height: `${(s.out / max) * 100}%`, background: '#0b6ef6', borderRadius: 4 }} />
           </div>
-          <div style={{ fontSize: 11, color: '#8b919c' }}>{s.label}</div>
+          <div style={{ fontSize: 11, color: 'var(--muted)' }}>{s.label}</div>
         </div>
       ))}
     </div>

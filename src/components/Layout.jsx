@@ -4,10 +4,12 @@ import Logo from './Logo'
 import { Icon } from './Icons'
 import { useBank } from '../store/BankContext'
 import { useI18n } from '../i18n/I18nContext'
+import { useTheme } from '../theme/ThemeContext'
 
 export default function Layout() {
   const bank = useBank()
   const { t } = useI18n()
+  const { theme, toggleTheme } = useTheme()
   const nav = useNavigate()
   const loc = useLocation()
   const [q, setQ] = useState('')
@@ -56,6 +58,9 @@ export default function Layout() {
           />
         </form>
         <div className="topbar-right">
+          <button className="icon-btn" onClick={toggleTheme} title={t('settings.theme')}>
+            <Icon name={theme === 'dark' ? 'sun' : 'moon'} />
+          </button>
           <button className="icon-btn" onClick={() => nav('/spravy')} title={t('nav.messages')}>
             <Icon name="bell" />
           </button>

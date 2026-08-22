@@ -1,9 +1,11 @@
 import { useBank } from '../store/BankContext'
 import { LangSwitch, useI18n } from '../i18n/I18nContext'
+import { useTheme } from '../theme/ThemeContext'
 
 export default function Settings() {
   const bank = useBank()
   const { t, date, langs, lang, setLang } = useI18n()
+  const { theme, setTheme } = useTheme()
   const n = bank.settings.notifications
 
   return (
@@ -31,6 +33,20 @@ export default function Settings() {
 
         <div className="card card-pad">
           <h3 style={{ margin: '0 0 8px', fontSize: 15 }}>{t('settings.display')}</h3>
+          <div className="switch">
+            <div>
+              <div className="t">{t('settings.theme')}</div>
+              <div className="d">{t('settings.themeD')}</div>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', margin: '0 0 12px' }}>
+            <button type="button" className={`chip ${theme === 'dark' ? 'on' : ''}`} onClick={() => setTheme('dark')}>
+              {t('settings.themeDark')}
+            </button>
+            <button type="button" className={`chip ${theme === 'light' ? 'on' : ''}`} onClick={() => setTheme('light')}>
+              {t('settings.themeLight')}
+            </button>
+          </div>
           <div className="switch">
             <div>
               <div className="t">{t('settings.lang')}</div>

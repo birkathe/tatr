@@ -4,16 +4,19 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import { BankProvider } from './store/BankContext'
 import { I18nProvider } from './i18n/I18nContext'
+import { ThemeProvider } from './theme/ThemeContext'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <I18nProvider>
-        <BankProvider>
-          <App />
-        </BankProvider>
-      </I18nProvider>
+      <ThemeProvider>
+        <I18nProvider>
+          <BankProvider>
+            <App />
+          </BankProvider>
+        </I18nProvider>
+      </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>
 )

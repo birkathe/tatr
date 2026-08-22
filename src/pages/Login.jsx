@@ -3,10 +3,13 @@ import Logo from '../components/Logo'
 import { useBank } from '../store/BankContext'
 import { passwordMatches, pidMatches } from '../lib/auth'
 import { LangSwitch, useI18n } from '../i18n/I18nContext'
+import { useTheme } from '../theme/ThemeContext'
+import { Icon } from '../components/Icons'
 
 export default function Login() {
   const { login } = useBank()
   const { t } = useI18n()
+  const { theme, toggleTheme } = useTheme()
   const [pid, setPid] = useState('')
   const [password, setPassword] = useState('')
   const [showPass, setShowPass] = useState(false)
@@ -30,6 +33,9 @@ export default function Login() {
       <div className="login-top">
         <Logo light />
         <div className="login-top-right">
+          <button type="button" className="icon-btn" onClick={toggleTheme} title={t('settings.theme')}>
+            <Icon name={theme === 'dark' ? 'sun' : 'moon'} />
+          </button>
           <LangSwitch light />
           <div className="meta">{t('dialog')}</div>
         </div>
