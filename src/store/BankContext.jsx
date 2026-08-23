@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { createSeed, DEPOSIT_OFFERS } from '../data/seed'
 import { addMonths, uid } from '../lib/format'
 
-const STORAGE_KEY = 'tb-ib-demo-v15'
+const STORAGE_KEY = 'tb-ib-demo-v16'
 const SESSION_KEY = 'tb-ib-session'
 
 const BankContext = createContext(null)
@@ -12,7 +12,7 @@ function loadState() {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return createSeed()
     const parsed = JSON.parse(raw)
-    if (!parsed?.version || parsed.version < 15 || !parsed.user) return createSeed()
+    if (!parsed?.version || parsed.version < 16 || !parsed.user) return createSeed()
     return parsed
   } catch {
     return createSeed()
