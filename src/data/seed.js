@@ -110,7 +110,7 @@ export function createSeed() {
   const currentBalance = 83.52
 
   return {
-    version: 9,
+    version: 10,
     user: {
       firstName: 'Yurii',
       lastName: 'Biriukov',
@@ -174,8 +174,8 @@ export function createSeed() {
         amount: 74500,
         rate: 4.6,
         months: 6,
-        start: '2026-08-24T08:00:00.000Z',
-        end: '2027-02-24T08:00:00.000Z',
+        start: '2026-08-22T08:00:00.000Z',
+        end: '2027-02-22T08:00:00.000Z',
         interestExpected: 1713.5,
         autoRenew: false,
         status: 'aktívny',
@@ -219,9 +219,9 @@ export function createSeed() {
     messages: [
       {
         id: 'msg_dep_74500',
-        date: '2026-08-24T08:00:00.000Z',
+        date: '2026-08-22T08:00:00.000Z',
         title: 'Digitálny termínovaný vklad 74 500 €',
-        body: 'Zriadili sme Digitálny termínovaný vklad 74 500,00 € na 6 mesiacov (24. 8. 2026 – 24. 2. 2027) so sadzbou 4,60 % p.a. Očakávaný úrok 1 713,50 €.',
+        body: 'Zriadili sme Digitálny termínovaný vklad 74 500,00 € na 6 mesiacov (22. 8. 2026 – 22. 2. 2027) so sadzbou 4,60 % p.a. Očakávaný úrok 1 713,50 €.',
         read: false,
         type: 'produkt',
       },
