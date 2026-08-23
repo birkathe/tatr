@@ -37,6 +37,8 @@ export const FX = [
 ]
 
 const TX = [
+  { day: '2026-08-23', h: 8, m: 40, name: 'Digitálny termínovaný vklad', cat: 'vklad', amt: -76213.5, type: 'vklad', note: 'Doplnenie vkladu z vyplateného TV, 4,60 % p.a., 6 mesiacov' },
+  { day: '2026-08-23', h: 8, m: 15, name: 'Splatnosť termínovaného vkladu', cat: 'vklad', amt: 76213.5, type: 'vklad', note: 'Istina 74 500,00 € + úrok 1 713,50 €' },
   { day: '2026-06-17', h: 18, m: 41, name: 'Lidl Košice – Moldavská', cat: 'potraviny', amt: -32.18, type: 'karta', note: 'POS nákup' },
   { day: '2026-06-17', h: 7, m: 28, name: 'Slovnaft Košice Južná', cat: 'doprava', amt: -35.40, type: 'karta', note: 'PHM' },
   { day: '2026-06-16', h: 16, m: 40, name: 'Dr. Max OC Optima', cat: 'zdravie', amt: -12.90, type: 'karta' },
@@ -110,7 +112,7 @@ export function createSeed() {
   const currentBalance = 83.52
 
   return {
-    version: 11,
+    version: 12,
     user: {
       firstName: 'Yurii',
       lastName: 'Biriukov',
@@ -171,14 +173,29 @@ export function createSeed() {
         id: 'dep_74500',
         name: 'Digitálny termínovaný vklad',
         accountFrom: currentId,
+        amount: 150713.5,
+        rate: 4.6,
+        months: 6,
+        start: at('2026-08-23', 8, 40),
+        end: at('2027-02-23', 8, 40),
+        interestExpected: 3466.41,
+        autoRenew: false,
+        status: 'aktívny',
+      },
+      {
+        id: 'dep_prev_74500',
+        name: 'Digitálny termínovaný vklad',
+        accountFrom: currentId,
         amount: 74500,
         rate: 4.6,
         months: 6,
-        start: at('2026-08-23', 8, 0),
-        end: at('2027-02-23', 8, 0),
+        start: at('2026-02-23', 8, 0),
+        end: at('2026-08-23', 8, 15),
         interestExpected: 1713.5,
+        paidInterest: 1713.5,
         autoRenew: false,
-        status: 'aktívny',
+        status: 'splatený',
+        closedAt: at('2026-08-23', 8, 15),
       },
     ],
     recipients: [
@@ -219,9 +236,17 @@ export function createSeed() {
     messages: [
       {
         id: 'msg_dep_74500',
-        date: at('2026-08-23', 8, 0),
-        title: 'Digitálny termínovaný vklad 74 500 €',
-        body: 'Zriadili sme Digitálny termínovaný vklad 74 500,00 € na 6 mesiacov (23. 8. 2026 – 23. 2. 2027) so sadzbou 4,60 % p.a. Očakávaný úrok 1 713,50 €.',
+        date: at('2026-08-23', 8, 40),
+        title: 'Digitálny termínovaný vklad 150 713,50 €',
+        body: 'Z vyplateného vkladu sme na existujúci Digitálny termínovaný vklad doplnili 76 213,50 €. Aktuálna istina 150 713,50 € na 6 mesiacov (23. 8. 2026 – 23. 2. 2027) so sadzbou 4,60 % p.a. Očakávaný úrok 3 466,41 €.',
+        read: false,
+        type: 'produkt',
+      },
+      {
+        id: 'msg_dep_paid',
+        date: at('2026-08-23', 8, 15),
+        title: 'Splatnosť termínovaného vkladu 74 500 €',
+        body: 'Dnes sme splatili Digitálny termínovaný vklad 74 500,00 € (23. 2. 2026 – 23. 8. 2026) so sadzbou 4,60 % p.a. Na účet Tatra Personal sme pripísali 76 213,50 € (istina + úrok 1 713,50 €).',
         read: false,
         type: 'produkt',
       },
