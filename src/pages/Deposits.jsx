@@ -66,7 +66,49 @@ export default function Deposits() {
         </div>
       </div>
 
-      <div className="grid grid-3" style={{ marginBottom: 16 }}>
+      <h3 className="section-title">Moje vklady</h3>
+      <div className="dep-list" style={{ marginBottom: 20 }}>
+        {active.map((d) => {
+          const start = new Date(d.start)
+          const end = new Date(d.end)
+          const now = new Date()
+          const pct = Math.min(100, Math.max(0, ((now - start) / (end - start)) * 100))
+          return (
+            <div key={d.id} className="card card-pad dep-card">
+              <div className="dep-card-top">
+                <div>
+                  <div className="dep-card-name">{d.name}</div>
+                  <div className="dep-card-meta">{d.months} mes. · {d.rate.toFixed(2).replace('.', ',')} % p.a.</div>
+                </div>
+                <span className="pill ok">{d.status}</span>
+              </div>
+              <div className="dep-card-amt">{formatMoney(d.amount)}</div>
+              <div className="dep-card-int">+ {formatMoney(d.interestExpected)} úrok pri splatnosti</div>
+              <div className="bar-track" style={{ margin: '14px 0 8px' }}>
+                <div className="bar-fill" style={{ width: `${pct}%`, background: 'var(--blue)' }} />
+              </div>
+              <div className="dep-card-dates">
+                <span><em>Od</em> {formatDate(d.start)}</span>
+                <span><em>Do</em> {formatDate(d.end)}</span>
+              </div>
+              <button
+                className="btn btn-sm btn-danger"
+                style={{ marginTop: 14, width: 'auto' }}
+                onClick={() => {
+                  if (window.confirm('Predčasné ukončenie zníži vyplatený úrok. Pokračovať?')) bank.closeDeposit(d.id, true)
+                }}
+              >
+                Predčasne ukončiť
+              </button>
+            </div>
+          )
+        })}
+        {active.length === 0 && !creating && (
+          <div className="card empty">Zatiaľ nemáte aktívny termínovaný vklad.</div>
+        )}
+      </div>
+
+      <div className="grid grid-3 dep-kpis" style={{ marginBottom: 16 }}>
         <div className="card kpi">
           <div className="l">Aktívne vklady</div>
           <div className="v">{formatMoney(total)}</div>
@@ -109,7 +151,7 @@ export default function Deposits() {
               <input type="number" min="100" step="10" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} />
               <div className="hint">Minimum 100 €</div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, margin: '8px 0 16px' }}>
+            <div className="offer-grid">
               {DEPOSIT_OFFERS.map((o) => (
                 <button
                   type="button"
@@ -142,48 +184,6 @@ export default function Deposits() {
           </form>
         </div>
       )}
-
-      <h3 style={{ fontSize: 16, margin: '8px 0 12px' }}>Moje vklady</h3>
-      <div className="grid grid-eq" style={{ marginBottom: 20 }}>
-        {active.map((d) => {
-          const start = new Date(d.start)
-          const end = new Date(d.end)
-          const now = new Date()
-          const pct = Math.min(100, Math.max(0, ((now - start) / (end - start)) * 100))
-          return (
-            <div key={d.id} className="card card-pad">
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div>
-                  <div style={{ fontWeight: 600 }}>{d.name}</div>
-                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>{d.months} mes. · {d.rate.toFixed(2).replace('.', ',')} % p.a.</div>
-                </div>
-                <span className="pill ok">{d.status}</span>
-              </div>
-              <div style={{ fontSize: 26, fontWeight: 650, letterSpacing: '-0.03em', margin: '12px 0 4px' }}>{formatMoney(d.amount)}</div>
-              <div style={{ fontSize: 13, color: 'var(--green)' }}>+ {formatMoney(d.interestExpected)} úrok pri splatnosti</div>
-              <div className="bar-track" style={{ margin: '14px 0 8px' }}>
-                <div className="bar-fill" style={{ width: `${pct}%`, background: 'var(--blue)' }} />
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--muted)' }}>
-                <span>Od {formatDate(d.start)}</span>
-                <span>Do {formatDate(d.end)}</span>
-              </div>
-              <button
-                className="btn btn-sm btn-danger"
-                style={{ marginTop: 14 }}
-                onClick={() => {
-                  if (window.confirm('Predčasné ukončenie zníži vyplatený úrok. Pokračovať?')) bank.closeDeposit(d.id, true)
-                }}
-              >
-                Predčasne ukončiť
-              </button>
-            </div>
-          )
-        })}
-        {active.length === 0 && !creating && (
-          <div className="card empty">Zatiaľ nemáte aktívny termínovaný vklad.</div>
-        )}
-      </div>
 
       {history.length > 0 && (
         <>

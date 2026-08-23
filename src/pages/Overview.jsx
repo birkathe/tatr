@@ -110,17 +110,17 @@ export default function Overview() {
           <span className="quick-ico"><Icon name="card" size={18} /></span>
           {t('nav.cards')}
         </Link>
-        <Link to="/prijemcovia" className="quick-item">
-          <span className="quick-ico"><Icon name="users" size={18} /></span>
-          {t('nav.recipients')}
-        </Link>
-        <Link to="/dokumenty" className="quick-item">
-          <span className="quick-ico"><Icon name="file" size={18} /></span>
-          {t('nav.documents')}
-        </Link>
         <Link to="/vydavky" className="quick-item">
           <span className="quick-ico"><Icon name="chart" size={18} /></span>
           {t('nav.spending')}
+        </Link>
+        <Link to="/prijemcovia" className="quick-item hide-mobile">
+          <span className="quick-ico"><Icon name="users" size={18} /></span>
+          {t('nav.recipients')}
+        </Link>
+        <Link to="/dokumenty" className="quick-item hide-mobile">
+          <span className="quick-ico"><Icon name="file" size={18} /></span>
+          {t('nav.documents')}
         </Link>
       </div>
 
@@ -151,7 +151,7 @@ export default function Overview() {
         </div>
 
         <div className="dash-side">
-          <div className="card card-pad">
+          <div className={`card card-pad ${topCats.length === 0 ? 'hide-mobile' : ''}`}>
             <div className="card-h" style={{ padding: 0, marginBottom: 10 }}>
               <h3>{t('overview.spending')}</h3>
               <Link to="/vydavky">Detail</Link>
@@ -172,7 +172,7 @@ export default function Overview() {
             ))}
           </div>
 
-          <div className="card card-pad">
+          <div className="card card-pad hide-mobile">
             <h3 style={{ margin: '0 0 10px', fontSize: 15 }}>{t('overview.fx')}</h3>
             <div className="fx-head">
               <span />
@@ -188,7 +188,7 @@ export default function Overview() {
             ))}
           </div>
 
-          <div className="card card-pad">
+          <div className="card card-pad hide-mobile">
             <div className="card-h" style={{ padding: 0, marginBottom: 8 }}>
               <h3>{t('nav.messages')}</h3>
               <Link to="/spravy">{t('overview.allMoves')}</Link>

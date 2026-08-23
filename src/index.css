@@ -745,6 +745,34 @@ table.data tr:hover td { background: var(--hover); }
 .acc-tile-actions a, .acc-tile-actions button {
   color: #fff; background: none; border: 0; padding: 0; opacity: .85; font-weight: 500;
 }
+.offer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 8px 0 16px;
+}
+.section-title { font-size: 16px; margin: 4px 0 12px; font-weight: 600; }
+.dep-list { display: grid; gap: 12px; }
+.dep-card-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.dep-card-name { font-weight: 600; }
+.dep-card-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.dep-card-amt { font-size: 26px; font-weight: 650; letter-spacing: -0.02em; margin: 12px 0 4px; }
+.dep-card-int { font-size: 13px; color: var(--green); }
+.dep-card-dates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--ink);
+}
+.dep-card-dates em {
+  font-style: normal;
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 2px;
+}
+
 .quick-row {
   display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px;
 }
@@ -769,17 +797,47 @@ table.data tr:hover td { background: var(--hover); }
 @media (max-width: 800px) {
   .sidebar { display: none; }
   .desktop-only { display: none !important; }
+  .hide-mobile { display: none !important; }
   .topbar .tb-logo-text { display: none; }
   .topbar .lang-switch { display: none; }
-  .grid-3, .grid-4, .grid-eq { grid-template-columns: 1fr 1fr; }
+  .grid-3, .grid-4, .grid-eq { grid-template-columns: 1fr; }
   .grid-2 { grid-template-columns: 1fr; }
-  .main { padding: 14px 14px calc(88px + env(safe-area-inset-bottom)); }
+  .main { padding: 12px 12px calc(88px + env(safe-area-inset-bottom)); }
   .row-2 { grid-template-columns: 1fr; }
   .page-head h1 { font-size: 22px; }
-  .page-head { margin-bottom: 14px; }
-  .home-account .acc-tile { max-width: none; min-height: 168px; }
-  .dash-kpis, .dash-products, .dash-body { grid-template-columns: 1fr; }
-  .quick-row { grid-template-columns: repeat(3, 1fr); }
+  .page-head {
+    margin-bottom: 12px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .page-head p { display: none; }
+  .page-actions { width: 100%; }
+  .page-actions .btn { width: 100% !important; }
+  .home-account .acc-tile { max-width: none; min-height: 148px; }
+  .dash { gap: 12px; }
+  .dash-kpis {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .dash-kpis .kpi-inline:first-child { grid-column: 1 / -1; }
+  .kpi-inline { padding: 12px 14px; }
+  .kpi-inline b { font-size: 18px; }
+  .dash-products, .dash-body { grid-template-columns: 1fr; }
+  .dash-products { gap: 10px; }
+  .dash-products .acc-tile { min-height: 148px; padding: 16px; }
+  .dash-products .dep-tile {
+    min-height: 0;
+    padding: 14px 16px;
+  }
+  .dash-products .dep-tile .bal { font-size: 20px; margin-top: 10px; }
+  .quick-row { grid-template-columns: repeat(4, 1fr); gap: 4px; }
+  .quick-item { font-size: 10px; padding: 4px 2px; }
+  .quick-ico { width: 40px; height: 40px; border-radius: 12px; }
+  .dep-kpis { display: none; }
+  .section-title { display: none; }
+  .offer-grid { grid-template-columns: 1fr 1fr; }
+  .dep-card-amt { font-size: 28px; }
   .kpi .v { font-size: 18px; }
   .login-hero { display: none; }
   .login-wrap { padding: 12px 16px 24px; margin: 0 auto; }
@@ -788,6 +846,7 @@ table.data tr:hover td { background: var(--hover); }
   .login-top .meta { display: none; }
   .field input, .field select, .field textarea { font-size: 16px; }
   .btn { min-height: 46px; }
+  .btn-sm { min-height: 36px; }
   .demo-bar { font-size: 11px; padding: 6px 10px; padding-top: calc(6px + env(safe-area-inset-top)); }
   .modal { width: min(100%, 420px); }
   .paycard { border-radius: 16px; }
