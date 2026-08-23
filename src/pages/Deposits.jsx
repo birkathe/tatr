@@ -13,6 +13,7 @@ export default function Deposits() {
   const [form, setForm] = useState({ fromId: 'acc_personal', amount: '1000', months: 12, autoRenew: false })
   const [auth, setAuth] = useState(false)
   const [error, setError] = useState('')
+  const [showHistory, setShowHistory] = useState(false)
 
   const offer = DEPOSIT_OFFERS.find((o) => o.months === Number(form.months))
   const interest = useMemo(() => {
@@ -186,27 +187,43 @@ export default function Deposits() {
       )}
 
       {history.length > 0 && (
-        <>
-          <h3 style={{ fontSize: 16, margin: '8px 0 12px' }}>História vkladov</h3>
-          <div className="card">
-            <table className="data">
-              <thead>
-                <tr><th>Produkt</th><th className="right">Istina</th><th>Sadzba</th><th>Stav</th><th>Úrok</th></tr>
-              </thead>
-              <tbody>
-                {history.map((d) => (
-                  <tr key={d.id}>
-                    <td>{d.name} · {d.months} mes.</td>
-                    <td className="right mono">{formatMoney(d.amount)}</td>
-                    <td>{d.rate} %</td>
-                    <td><span className="pill">{d.status}</span></td>
-                    <td>{formatMoney(d.paidInterest || 0)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </>
+        <div className="hist-wrap">
+          <button type="button" className={`hist-toggle ${showHistory ? 'open' : ''}`} onClick={() => setShowHistory((v) => !v)}>
+            <span>
+              {t('deposits.history')}
+              <em>{history.length}</em>
+            </span>
+            <span className="hist-chevron" aria-hidden>{showHistory ? '▾' : '▸'}</span>
+          </button>
+          {showHistory && (
+            <div className="card hist-panel">
+              <div className="hist-scroll">
+                <table className="data">
+                  <thead>
+                    <tr>
+                      <th>{t('deposits.product')}</th>
+                      <th className="right">{t('deposits.principal')}</th>
+                      <th>{t('deposits.rate')}</th>
+                      <th>{t('deposits.status')}</th>
+                      <th>Úrok</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {history.map((d) => (
+                      <tr key={d.id}>
+                        <td>{d.name} · {d.months} mes.<div className="tx-meta">{formatDate(d.start)} – {formatDate(d.end)}</div></td>
+                        <td className="right mono">{formatMoney(d.amount)}</td>
+                        <td>{d.rate.toFixed(2).replace('.', ',')} %</td>
+                        <td><span className="pill">{d.status}</span></td>
+                        <td>{formatMoney(d.paidInterest || 0)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
       )}
 
       {auth && (

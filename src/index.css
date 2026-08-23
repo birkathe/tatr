@@ -772,6 +772,36 @@ table.data tr:hover td { background: var(--hover); }
   color: var(--muted);
   margin-bottom: 2px;
 }
+.hist-wrap { margin-top: 8px; }
+.hist-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: left;
+}
+.hist-toggle.open {
+  border-radius: 12px 12px 0 0;
+  border-bottom-color: transparent;
+}
+.hist-toggle em {
+  font-style: normal;
+  margin-left: 8px;
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 13px;
+}
+.hist-chevron { color: var(--muted); font-size: 14px; }
+.hist-panel { border-top-left-radius: 0; border-top-right-radius: 0; }
+.hist-scroll { overflow-x: auto; }
 
 .quick-row {
   display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px;

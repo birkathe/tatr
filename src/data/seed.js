@@ -38,7 +38,7 @@ export const FX = [
 
 const TX = [
   { day: '2026-08-23', h: 8, m: 40, name: 'Digitálny termínovaný vklad', cat: 'vklad', amt: -77000, type: 'vklad', note: '4,60 % p.a., viazanosť 6 mesiacov' },
-  { day: '2026-08-23', h: 8, m: 15, name: 'Splatnosť termínovaného vkladu', cat: 'vklad', amt: 52198.5, type: 'vklad', note: 'Istina 51 000,00 € + úrok 1 198,50 €' },
+  { day: '2026-08-23', h: 8, m: 15, name: 'Splatnosť termínovaného vkladu', cat: 'vklad', amt: 52224, type: 'vklad', note: 'Istina 51 000,00 € + úrok 1 224,00 €' },
   { day: '2026-08-13', h: 10, m: 22, name: 'Yurii Biriukov', cat: 'transfer', amt: 24000, type: 'sepa', vs: '20260813', note: 'Prevod', iban: 'SK81 0900 0000 0051 1034 1990' },
   { day: '2026-06-17', h: 18, m: 41, name: 'Lidl Košice – Moldavská', cat: 'potraviny', amt: -32.18, type: 'karta', note: 'POS nákup' },
   { day: '2026-06-17', h: 7, m: 28, name: 'Slovnaft Košice Južná', cat: 'doprava', amt: -35.40, type: 'karta', note: 'PHM' },
@@ -113,7 +113,7 @@ export function createSeed() {
   const currentBalance = 279.52
 
   return {
-    version: 16,
+    version: 17,
     user: {
       firstName: 'Yurii',
       lastName: 'Biriukov',
@@ -184,13 +184,13 @@ export function createSeed() {
         status: 'aktívny',
       },
       ...[
-        ['2026-02-23', '2026-08-23', 4.7],
-        ['2025-08-23', '2026-02-23', 4.9],
-        ['2025-02-23', '2025-08-23', 5.2],
-        ['2024-08-23', '2025-02-23', 5.5],
-        ['2024-02-23', '2024-08-23', 5.8],
-        ['2023-08-23', '2024-02-23', 6.1],
-        ['2023-02-23', '2023-08-23', 6.4],
+        ['2026-02-23', '2026-08-23', 4.8],
+        ['2025-08-23', '2026-02-23', 5.6],
+        ['2025-02-23', '2025-08-23', 5.3],
+        ['2024-08-23', '2025-02-23', 6.0],
+        ['2024-02-23', '2024-08-23', 5.7],
+        ['2023-08-23', '2024-02-23', 6.5],
+        ['2023-02-23', '2023-08-23', 6.2],
       ].map(([start, end, rate]) => {
         const interest = Math.round(51000 * (rate / 100) * 0.5 * 100) / 100
         return {
@@ -259,7 +259,7 @@ export function createSeed() {
         id: 'msg_dep_paid',
         date: at('2026-08-23', 8, 15),
         title: 'Splatnosť termínovaného vkladu 51 000 €',
-        body: 'Dnes sme splatili Digitálny termínovaný vklad 51 000,00 € (23. 2. 2026 – 23. 8. 2026) so sadzbou 4,70 % p.a. Na účet Tatra Personal sme pripísali 52 198,50 € (istina + úrok 1 198,50 €).',
+        body: 'Dnes sme splatili Digitálny termínovaný vklad 51 000,00 € (23. 2. 2026 – 23. 8. 2026) so sadzbou 4,80 % p.a. Na účet Tatra Personal sme pripísali 52 224,00 € (istina + úrok 1 224,00 €).',
         read: false,
         type: 'produkt',
       },
