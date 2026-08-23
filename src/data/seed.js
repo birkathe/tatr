@@ -38,7 +38,7 @@ export const FX = [
 
 const TX = [
   { day: '2026-08-23', h: 8, m: 40, name: 'Digitálny termínovaný vklad', cat: 'vklad', amt: -77000, type: 'vklad', note: '4,60 % p.a., viazanosť 6 mesiacov' },
-  { day: '2026-08-23', h: 8, m: 15, name: 'Splatnosť termínovaného vkladu', cat: 'vklad', amt: 53196, type: 'vklad', note: 'Istina 52 000,00 € + úrok 1 196,00 €' },
+  { day: '2026-08-23', h: 8, m: 15, name: 'Splatnosť termínovaného vkladu', cat: 'vklad', amt: 52402.5, type: 'vklad', note: 'Istina 51 000,00 € + úrok 1 402,50 €' },
   { day: '2026-08-13', h: 10, m: 22, name: 'Yurii Biriukov', cat: 'transfer', amt: 24000, type: 'sepa', vs: '20260813', note: 'Prevod', iban: 'SK81 0900 0000 0051 1034 1990' },
   { day: '2026-06-17', h: 18, m: 41, name: 'Lidl Košice – Moldavská', cat: 'potraviny', amt: -32.18, type: 'karta', note: 'POS nákup' },
   { day: '2026-06-17', h: 7, m: 28, name: 'Slovnaft Košice Južná', cat: 'doprava', amt: -35.40, type: 'karta', note: 'PHM' },
@@ -113,7 +113,7 @@ export function createSeed() {
   const currentBalance = 279.52
 
   return {
-    version: 14,
+    version: 15,
     user: {
       firstName: 'Yurii',
       lastName: 'Biriukov',
@@ -183,21 +183,29 @@ export function createSeed() {
         autoRenew: false,
         status: 'aktívny',
       },
-      {
-        id: 'dep_prev_52000',
+      ...[
+        ['2026-02-23', '2026-08-23'],
+        ['2025-08-23', '2026-02-23'],
+        ['2025-02-23', '2025-08-23'],
+        ['2024-08-23', '2025-02-23'],
+        ['2024-02-23', '2024-08-23'],
+        ['2023-08-23', '2024-02-23'],
+        ['2023-02-23', '2023-08-23'],
+      ].map(([start, end]) => ({
+        id: `dep_hist_${start.slice(0, 7).replace('-', '')}`,
         name: 'Digitálny termínovaný vklad',
         accountFrom: currentId,
-        amount: 52000,
-        rate: 4.6,
+        amount: 51000,
+        rate: 5.5,
         months: 6,
-        start: at('2026-02-23', 8, 0),
-        end: at('2026-08-23', 8, 15),
-        interestExpected: 1196,
-        paidInterest: 1196,
-        autoRenew: false,
+        start: at(start, 8, 0),
+        end: at(end, 8, 15),
+        interestExpected: 1402.5,
+        paidInterest: 1402.5,
+        autoRenew: true,
         status: 'splatený',
-        closedAt: at('2026-08-23', 8, 15),
-      },
+        closedAt: at(end, 8, 15),
+      })),
     ],
     recipients: [
       { id: 'rcp_yb_slsp', name: 'Yurii Biriukov', iban: 'SK81 0900 0000 0051 1034 1990', bank: 'Slovenská sporiteľňa', vs: '', note: 'Vlastný účet SLSP' },
@@ -247,8 +255,8 @@ export function createSeed() {
       {
         id: 'msg_dep_paid',
         date: at('2026-08-23', 8, 15),
-        title: 'Splatnosť termínovaného vkladu 52 000 €',
-        body: 'Dnes sme splatili Digitálny termínovaný vklad 52 000,00 € (23. 2. 2026 – 23. 8. 2026) so sadzbou 4,60 % p.a. Na účet Tatra Personal sme pripísali 53 196,00 € (istina + úrok 1 196,00 €).',
+        title: 'Splatnosť termínovaného vkladu 51 000 €',
+        body: 'Dnes sme splatili Digitálny termínovaný vklad 51 000,00 € (23. 2. 2026 – 23. 8. 2026) so sadzbou 5,50 % p.a. Na účet Tatra Personal sme pripísali 52 402,50 € (istina + úrok 1 402,50 €).',
         read: false,
         type: 'produkt',
       },
